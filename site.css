@@ -1,0 +1,26 @@
+﻿body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+p {
+    max-width: 70ex;
+}
+
+table {
+    border: solid thin;
+}
+
+td, th {
+    border: solid thin;
+    padding: 5px;
+}
+
+tr {
+    vertical-align: top;
+}
+
+.file-time {
+    font-family: monospace;
+    font-size: small;
+    text-wrap: avoid;
+}
