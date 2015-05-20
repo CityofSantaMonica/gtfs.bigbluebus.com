@@ -7,7 +7,11 @@
 }
 
 .navbar-toggle {
-    color: #fff;
+    margin-top: 30px;
+}
+
+.navbar-toggle .icon-bar {
+    background-color: #fff;
 }
 
 .navbar ul.nav {
@@ -30,9 +34,14 @@ tr {
     vertical-align: top;
 }
 
-.file-time {
+td.file-time>span {
     font-family: monospace;
     font-size: small;
-    text-wrap: avoid;
-    width: 70px;
+}
+
+@media screen and (min-width: 760px) {
+    td.file-time>span {
+        min-width: 140px;
+        display: block;
+    }
 }
