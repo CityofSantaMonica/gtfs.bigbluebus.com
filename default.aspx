@@ -1,104 +1,81 @@
-﻿<%@ Page Language="C#" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="default.aspx.cs" Inherits="_default" %>
 
 <!DOCTYPE html>
 
-<script runat="server">
-
-    public DateTime currentLastUpdate
-    {
-        get
-        {
-            var fileInfo = new System.IO.FileInfo(Server.MapPath("current.zip"));
-            return fileInfo.LastWriteTime;
-        }
-    }
-
-    public DateTime alertsLastUpdate
-    {
-        get
-        {
-            var fileInfo = new System.IO.FileInfo(Server.MapPath("alerts.bin"));
-            return fileInfo.LastWriteTime;
-        }
-    }
-
-    public DateTime tripupdatesLastUpdate
-    {
-        get
-        {
-            var fileInfo = new System.IO.FileInfo(Server.MapPath("tripupdates.bin"));
-            return fileInfo.LastWriteTime;
-        }
-    }
-
-    public DateTime vehiclepositionsLastUpdate
-    {
-        get
-        {
-            var fileInfo = new System.IO.FileInfo(Server.MapPath("vehiclepositions.bin"));
-            return fileInfo.LastWriteTime;
-        }
-    }
-    
-</script>
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <title>Big Blue Bus GTFS Service</title>
-    <link href="site.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="site.css" rel="stylesheet">
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            <h1>Big Blue Bus GTFS Service</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>URL</th>
-                        <th>Last Update</th>
-                        <th>Description</th>
-                        <th>Documentation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="current.zip">current.zip</a>
-                        </td>
-                        <td class="file-time"><%= currentLastUpdate.ToString("yyyy-MM-ddTHH:mm:ssZ") %></td>
-                        <td>
-                            <p>The current static GTFS data. This file will always contain the current schedule period.</p>
-                            <p>At the time of a schedule change, this file will contain both schedule periods merged together. Your software must use the date ranges in the calendar.txt table to select the correct trips based on date.</p>
-                        </td>
-                        <td><a href="https://developers.google.com/transit/gtfs/">GTFS</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="alerts.bin">alerts.bin</a></td>
-                        <td class="file-time"><%= alertsLastUpdate.ToString("yyyy-MM-ddTHH:mm:ssZ") %></td>
-                        <td><p>GTFS-Realtime alert data. This file contains information about availability of stops and routes.</p></td>
-                        <td><a href="https://developers.google.com/transit/gtfs-realtime/service-alerts">GTFS-realtime Service Alerts</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="tripupdates.bin">tripupdates.bin</a></td>
-                        <td class="file-time"><%= tripupdatesLastUpdate.ToString("yyyy-MM-ddTHH:mm:ssZ") %></td>
-                        <td><p>GTFS-Realtime trip update data. This file contains information about the arrival times of current trips.</p></td>
-                        <td><a href="https://developers.google.com/transit/gtfs-realtime/trip-updates">GTFS-realtime Trip Updates</a></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="vehiclepositions.bin">vehiclepositions.bin</a></td>
-                        <td class="file-time"><%= vehiclepositionsLastUpdate.ToString("yyyy-MM-ddTHH:mm:ssZ") %></td>
-                        <td><p>GTFS-Realtime vehicle position data. This file contains the most recent latitude/longitude of vehicles assigned to current trips.</p></td>
-                        <td><a href="https://developers.google.com/transit/gtfs-realtime/vehicle-positions">GTFS-realtime Vehicle Positions</a></td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="navbar">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><img src="BBB-logo.jpg" alt="Big Blue Bus GTFS Service" /></a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+              <ul class="nav nav-pills pull-right">
+                  <asp:Repeater ID="NavBarRepeater" runat="server" ItemType="NavBarItem">
+                      <ItemTemplate>
+                          <li><a href="<%# Item.Url  %>" target="_blank"><%# Item.Text %></a></li>
+                      </ItemTemplate>
+                  </asp:Repeater>
+              </ul>
+            </div>
         </div>
+    </div>
+    <div class="container">
+        <h1 class="page-header">Big Blue Bus GTFS Service</h1>
+        <table class="table table-bordered table-striped table-responsive">
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Last Update UTC</th>
+                    <th>Description</th>
+                    <th>Documentation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <asp:Repeater ID="GTFSFileRepeater" runat="server" ItemType="GtfsFile">
+                    <ItemTemplate>
+                        <tr>
+                            <td>
+                                <a href="<%#Item.FileName %>"><%#Item.FileName %></a>
+                            </td>
+                            <td class="file-time">
+                                <span><%#Item.LastUpdateUtc.ToString(DateTimeFormat) %></span>
+                            </td>
+                            <td>
+                                <%#Item.Description %>
+                            </td>
+                            <td>
+                                <a href="<%#Item.DocumentationUrl.Key %>" target="_blank"><%#Item.DocumentationUrl.Value %></a>
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </tbody>
+        </table>
+        <hr />
+        <footer>
+            &copy; <%=DateTime.Now.Year %> City of Santa Monica
+        </footer>
+    </div>
     </form>
-    <h2>Archive</h2>
-    <p>
-        Previous versions of our GTFS files may be downloaded from <a href="https://github.com/CityofSantaMonica/GTFS">GitHub</a>.</p>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </body>
 </html>
