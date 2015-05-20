@@ -28,60 +28,45 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
               <ul class="nav nav-pills pull-right">
-                  <li>
-                      <a href="http://www.bigbluebus.com" target="_blank">BBB Home</a>
-                  </li>
-                  <li>
-                      <a href="https://github.com/CityofSantaMonica/GTFS" target="_blank">GTFS Archive</a>
-                  </li>
+                  <asp:Repeater ID="NavBarRepeater" runat="server" ItemType="NavBarItem">
+                      <ItemTemplate>
+                          <li><a href="<%# Item.Url  %>" target="_blank"><%# Item.Text %></a></li>
+                      </ItemTemplate>
+                  </asp:Repeater>
               </ul>
             </div>
         </div>
     </div>
     <div class="container">
         <h1 class="page-header">Big Blue Bus GTFS Service</h1>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped table-responsive">
             <thead>
                 <tr>
                     <th>URL</th>
-                    <th>Last Update</th>
+                    <th>Last Update UTC</th>
                     <th>Description</th>
                     <th>Documentation</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <a href="current.zip">current.zip</a>
-                    </td>
-                    <td class="file-time"><%= CurrentLastUpdate.ToString(DateTimeFormat) %></td>
-                    <td>
-                        <p>The current static GTFS data. This file will always contain the current schedule period.</p>
-                        <p>At the time of a schedule change, this file will contain both schedule periods merged together. Your software must use the date ranges in the calendar.txt table to select the correct trips based on date.</p>
-                    </td>
-                    <td><a href="https://developers.google.com/transit/gtfs/">GTFS</a></td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="alerts.bin">alerts.bin</a></td>
-                    <td class="file-time"><%= AlertsLastUpdate.ToString(DateTimeFormat) %></td>
-                    <td><p>GTFS-Realtime alert data. This file contains information about availability of stops and routes.</p></td>
-                    <td><a href="https://developers.google.com/transit/gtfs-realtime/service-alerts">GTFS-realtime Service Alerts</a></td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="tripupdates.bin">tripupdates.bin</a></td>
-                    <td class="file-time"><%= TripupdatesLastUpdate.ToString(DateTimeFormat) %></td>
-                    <td><p>GTFS-Realtime trip update data. This file contains information about the arrival times of current trips.</p></td>
-                    <td><a href="https://developers.google.com/transit/gtfs-realtime/trip-updates">GTFS-realtime Trip Updates</a></td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="vehiclepositions.bin">vehiclepositions.bin</a></td>
-                    <td class="file-time"><%= VehiclepositionsLastUpdate.ToString(DateTimeFormat) %></td>
-                    <td><p>GTFS-Realtime vehicle position data. This file contains the most recent latitude/longitude of vehicles assigned to current trips.</p></td>
-                    <td><a href="https://developers.google.com/transit/gtfs-realtime/vehicle-positions">GTFS-realtime Vehicle Positions</a></td>
-                </tr>
+                <asp:Repeater ID="GTFSFileRepeater" runat="server" ItemType="GtfsFile">
+                    <ItemTemplate>
+                        <tr>
+                            <td>
+                                <a href="<%#Item.FileName %>"><%#Item.FileName %></a>
+                            </td>
+                            <td class="file-time">
+                                <span><%#Item.LastUpdateUtc.ToString(DateTimeFormat) %></span>
+                            </td>
+                            <td>
+                                <%#Item.Description %>
+                            </td>
+                            <td>
+                                <a href="<%#Item.DocumentationUrl.Key %>" target="_blank"><%#Item.DocumentationUrl.Value %></a>
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                </asp:Repeater>
             </tbody>
         </table>
         <hr />
@@ -90,5 +75,7 @@
         </footer>
     </div>
     </form>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </body>
 </html>
