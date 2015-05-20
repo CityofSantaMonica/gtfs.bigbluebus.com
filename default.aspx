@@ -15,6 +15,29 @@
 </head>
 <body>
     <form id="form1" runat="server">
+    <div class="navbar">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><img src="BBB-logo.jpg" alt="Big Blue Bus GTFS Service" /></a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+              <ul class="nav nav-pills pull-right">
+                  <li>
+                      <a href="http://www.bigbluebus.com" target="_blank">BBB Home</a>
+                  </li>
+                  <li>
+                      <a href="https://github.com/CityofSantaMonica/GTFS" target="_blank">GTFS Archive</a>
+                  </li>
+              </ul>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <h1 class="page-header">Big Blue Bus GTFS Service</h1>
         <table class="table table-bordered table-striped">
@@ -61,8 +84,10 @@
                 </tr>
             </tbody>
         </table>
-        <h2>Archive</h2>
-        <p>Previous versions of our GTFS files may be downloaded from <a href="https://github.com/CityofSantaMonica/GTFS" target="_blank">GitHub</a>.</p>
+        <hr />
+        <footer>
+            &copy; <%=DateTime.Now.Year %> City of Santa Monica
+        </footer>
     </div>
     </form>
 </body>
