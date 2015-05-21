@@ -1,0 +1,52 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="site.master.cs" Inherits="site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Big Blue Bus GTFS Service</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="site.css" rel="stylesheet">
+    <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="navbar">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><img src="BBB-logo.jpg" alt="Big Blue Bus GTFS Service" /></a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+              <ul class="nav nav-pills pull-right">
+                  <asp:Repeater ID="NavBarRepeater" runat="server" ItemType="NavBarItem">
+                      <ItemTemplate>
+                          <li><a href="<%# Item.Url  %>" <%#!Item.Url.StartsWith("/") ? "target='_blank'" : String.Empty%>><%# Item.Text %></a></li>
+                      </ItemTemplate>
+                  </asp:Repeater>
+              </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server">
+        </asp:ContentPlaceHolder>
+        <hr />
+        <footer>
+            &copy; <%=DateTime.Now.Year %> City of Santa Monica
+        </footer>
+    </div>
+    </form>
+</body>
+</html>
