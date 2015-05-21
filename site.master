@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link href="site.css" rel="stylesheet">
-    <asp:ContentPlaceHolder id="head" runat="server">
+    <asp:ContentPlaceHolder ID="HeadContentPlaceHolder" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
@@ -32,7 +32,7 @@
               <ul class="nav nav-pills pull-right">
                   <asp:Repeater ID="NavBarRepeater" runat="server" ItemType="NavBarItem">
                       <ItemTemplate>
-                          <li><a href="<%# Item.Url  %>" target="_blank"><%# Item.Text %></a></li>
+                          <li><a href="<%# Item.Url  %>" <%#!Item.Url.StartsWith("/") ? "target='_blank'" : String.Empty%>><%# Item.Text %></a></li>
                       </ItemTemplate>
                   </asp:Repeater>
               </ul>
@@ -40,8 +40,7 @@
         </div>
     </div>
     <div class="container">
-        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
-        
+        <asp:ContentPlaceHolder ID="MainContentPlaceHolder" runat="server">
         </asp:ContentPlaceHolder>
         <hr />
         <footer>

@@ -9,9 +9,9 @@ public class NavBarItem
     {
         return new[] {
             new NavBarItem { Text = "Terms", Url = "/terms-and-conditions" },
-            new NavBarItem { Text = "BBB Home", Url = "http://www.bigbluebus.com" },
+            new NavBarItem { Text = "Discuss", Url = "https://github.com/CityofSantaMonica/GTFS/issues" },
             new NavBarItem { Text = "GTFS Archive", Url = "https://github.com/CityofSantaMonica/GTFS" },
-            new NavBarItem { Text = "Discuss", Url = "https://github.com/CityofSantaMonica/GTFS/issues" }
+            new NavBarItem { Text = "BBB Home", Url = "http://www.bigbluebus.com" }
         };
     }
 }
