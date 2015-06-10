@@ -16,7 +16,7 @@ while True:
 
         if zipfile.is_zipfile(currentzippath):
             currentzip = zipfile.ZipFile(currentzippath,'r')
-            currentzip.extractall("/home/site/wwwroot/gtfs")
+            currentzip.extractall("/home/site/wwwroot/csv")
 
             schedule = transitfeed.Schedule()
             trip = transitfeed.Trip()
@@ -32,5 +32,5 @@ while True:
             json.dump(forJson, open("/home/site/wwwroot/gtfs/trips.json","w"))
         previous_mtime = currentzipstat.st_mtime
     else:
-        sleep(60);
+        sleep(60)
     
