@@ -37,7 +37,6 @@ while True:
 
             #export shapes with route information
             shapeList = schedule.GetShapeList()
-            forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } } }
             features = []
             sortedTrips = sorted(tripList, key=lambda item: item.shape_id)
             for shape_id, trips in itertools.groupby(sortedTrips, key=lambda item: item.shape_id):
@@ -46,7 +45,7 @@ while True:
                 shape = schedule.GetShape(shape_id)
                 feature = {"type": "Feature", "properties": { "shape_id": shape.shape_id, "direction_id":trip.direction_id, "route_short_name" : route.route_short_name, "route_long_name" : route.route_long_name, "route_color" : route.route_color }, "geometry" : { "type": "LineString","coordinates": [[point[1], point[0]] for point in shape.points] } }
                 features.append(feature)
-                forJson["features"] = features
+            forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }, "features": features }
             json.dump(forJson, open("/home/site/wwwroot/gis/shapes.geojson","w"))
 
         previous_mtime = currentzipstat.st_mtime
