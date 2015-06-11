@@ -24,6 +24,7 @@ while True:
             trip = transitfeed.Trip()
             route = transitfeed.Route()
             #shape = transitfeed.Shape()
+            stop = transitfeed.Stop()
 
             #export trips for live map
             schedule.Load(currentzippath)
@@ -43,10 +44,19 @@ while True:
                 trip = next(trips)
                 route = schedule.GetRoute(trip.route_id)
                 shape = schedule.GetShape(shape_id)
-                feature = {"type": "Feature", "properties": { "shape_id": shape.shape_id, "direction_id":trip.direction_id, "route_short_name" : route.route_short_name, "route_long_name" : route.route_long_name, "route_color" : route.route_color }, "geometry" : { "type": "LineString","coordinates": [[point[1], point[0]] for point in shape.points] } }
+                feature = {"type": "Feature", "properties": { "shape_id" : shape.shape_id, "direction_id" : trip.direction_id, "route_short_name" : route.route_short_name, "route_long_name" : route.route_long_name, "route_color" : route.route_color }, "geometry" : { "type": "LineString","coordinates": [[point[1], point[0]] for point in shape.points] } }
                 features.append(feature)
             forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }, "features": features }
             json.dump(forJson, open("/home/site/wwwroot/gis/shapes.geojson","w"))
+
+            #export stops
+            stopList = schedule.GetStopList()
+            features = []
+            for stop in stopList:
+                feature =  {"type": "Feature", "properties": { "stop_id" : stop.stop_id, "stop_code": stop.stop_code, "stop_name" : stop.stop_name, "stop_desc" : stop.stop_desc}, "geometry" : { "type" : "Point", "coordinates" : [stop.stop_lon, stop.stop_lat] } }
+                features.append(feature)
+            forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }, "features": features }
+            json.dump(forJson, open("/home/site/wwwroot/gis/stops.geojson","w"))
 
         previous_mtime = currentzipstat.st_mtime
     else:
