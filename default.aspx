@@ -35,11 +35,16 @@
             </asp:Repeater>
         </tbody>
     </table>
-    <h2>CSV files</h2>
+    <h2>Parsed Data Files</h2>
+    <p>Each time the static GTFS file is updated (current.zip) the server will parse it into data files that can be accessed directly.</p>
+    <h3>CSV files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListTXT" Extension=".txt" />
-    <h2>JSON files</h2>
+    <h3>JSON files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListJSON" Extension=".json" />
-    <h2>GeoJSON files</h2>
+    <h2>GIS files</h2>
+    <h3>GeoJSON files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListGeoJSON" Extension=".geojson" />
+    <h3>KML files</h3>
+    <uc1:ParsedFileList runat="server" id="ParsedFileListKML" Extension=".kml" />
 </asp:Content>
 
