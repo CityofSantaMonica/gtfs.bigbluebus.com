@@ -39,7 +39,7 @@
             </asp:Repeater>
         </tbody>
     </table>
-    <h2>Live Map</h2>
+    <h2 id="livemap">Live Map</h2>
     <ul>
         <li>Hover over bus (colored circle) for route, bus number, and schedule adherance.</li>
         <li>Click on bus (colored circle) to display route</li>
