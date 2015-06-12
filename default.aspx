@@ -42,6 +42,7 @@
     <h2>Live Map</h2>
     <ul>
         <li>Hover over bus (colored circle) for route, bus number, and schedule adherance.</li>
+        <li>Click on bus (colored circle) to display route</li>
         <li>Map refreshes every 20 seconds</li>
         <li>Busses update their locations in intervals of about 45 seconds</li>
     </ul>

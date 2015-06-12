@@ -34,7 +34,7 @@ function getVehiclePosition(index) {
     var position = entity.vehicle.position;
     var vehicle = entity.vehicle.vehicle;
     var delay = getTripUpdateDelay(entity.id, trip.trip_id);
-    return { position: position, vehicle: vehicle, route: route, delay: delay };
+    return { position: position, vehicle: vehicle, trip: trip, route: route, delay: delay };
 }
 function markVehicles() {
     markers.forEach(function (marker) {
@@ -44,10 +44,24 @@ function markVehicles() {
         var VehiclePosition = getVehiclePosition(index);
         var position = VehiclePosition.position;
         var vehicle = VehiclePosition.vehicle;
+        var trip = VehiclePosition.trip;
         var route = VehiclePosition.route;
         var delay = VehiclePosition.delay;
         var latLng = new google.maps.LatLng(position.latitude, position.longitude);
         var marker = new google.maps.Marker({ position: latLng, map: map, title: route.route_short_name.concat(" - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")), icon: { path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z", anchor: new google.maps.Point(5, 5), size: new google.maps.Size(10, 10), origin: new google.maps.Point(5, 5), fillColor: "#".concat(route.route_color), fillOpacity: 100 } });
+        marker.shape_id = trip.shape_id;
+        marker.route_color = route.route_color;
+        google.maps.event.addListener(marker, 'click', (function (evt) {
+            selected_shape_id = this.shape_id;
+            selected_route_color = this.route_color;
+            map.data.setStyle(function (feature) {
+                var shape_id = feature.getProperty('shape_id');
+                return {
+                    strokeColor: "#".concat(selected_route_color),
+                    strokeOpacity: shape_id == selected_shape_id ? 1 : 0
+                }
+            });
+        }));
         bounds.extend(latLng);
         markers.add(marker);
     }
@@ -99,6 +113,14 @@ function sendRoutesRequest() {
 }
 function initialize() {
     map = new google.maps.Map(document.getElementById("example-map"), { center: new google.maps.LatLng(34.013776, -118.492043), zoom: 15 });
+    map.data.loadGeoJson('http://gtfs.bigbluebus.com/parsed/shapes.geojson', null, function () {
+        map.data.setStyle(function (feature) {
+            var color = feature.getProperty('route_color');
+            return {
+                strokeOpacity: 0
+            }
+        });
+    });
     var transitLayer = new google.maps.TransitLayer();
     transitLayer.setMap(map);
     sendRoutesRequest();
