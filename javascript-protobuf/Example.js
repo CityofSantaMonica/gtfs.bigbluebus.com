@@ -141,34 +141,42 @@ function sendPositionRequest() {
     sendRequest("vehiclepositions.bin", "arraybuffer", getPositionResponse);
 }
 function getStopTimesResponse() {
-    stop_times = JSON.parse(this.responseText);
-    var scheduledstoptimesmessage = document.getElementById("scheduledstoptimesmessage");
-    scheduledstoptimesmessage.style.display = "inline";
+    try {
+        stop_times = JSON.parse(this.responseText);
+        var scheduledstoptimesmessage = document.getElementById("scheduledstoptimesmessage");
+        scheduledstoptimesmessage.style.display = "inline";
+    } catch (e) { }
 }
 function sendStopTimesRequest() {
     sendRequest("parsed/stop_times.json", "text", getStopTimesResponse);
 }
 function getStopsResponse() {
-    stops = JSON.parse(this.responseText);
-    sendStopTimesRequest();
+    try {
+        stops = JSON.parse(this.responseText);
+        sendStopTimesRequest();
+    } catch (e) { }
 }
 function sendStopsRequest() {
     sendRequest("parsed/stops.json", "text", getStopsResponse);
 }
 function getTripsResponse() {
-    trips = JSON.parse(this.responseText);
-    sendStopsRequest();
-    sendPositionRequest();
-    window.setInterval(function () {
+    try {
+        trips = JSON.parse(this.responseText);
+        sendStopsRequest();
         sendPositionRequest();
-    }, 30000);
+        window.setInterval(function () {
+            sendPositionRequest();
+        }, 30000);
+    } catch (e) { }
 }
 function sendTripsRequest() {
     sendRequest("parsed/trips.json", "text", getTripsResponse);
 }
 function getRoutesResponse() {
-    routes = JSON.parse(this.responseText);
-    sendTripsRequest();
+    try {
+        routes = JSON.parse(this.responseText);
+        sendTripsRequest();
+    } catch (e) { }
 }
 function sendRoutesRequest() {
     sendRequest("parsed/routes.json", "text", getRoutesResponse);
