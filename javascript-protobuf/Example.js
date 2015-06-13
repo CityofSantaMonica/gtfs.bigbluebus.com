@@ -162,7 +162,8 @@ function sendStopsRequest() {
 function getTripsResponse() {
     try {
         trips = JSON.parse(this.responseText);
-        sendStopsRequest();
+        if (!(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i)))
+            sendStopsRequest();
         sendPositionRequest();
         window.setInterval(function () {
             sendPositionRequest();
