@@ -4,6 +4,7 @@ Example real-time bus location map
 var map;
 var bounds = new google.maps.LatLngBounds();
 var markers = new Set();
+var infoWindow = new google.maps.InfoWindow({ content: "" });
 var ProtoBuf = dcodeIO.ProtoBuf;
 var transit_realtime = ProtoBuf.loadProtoFile("javascript-protobuf/gtfs-realtime.proto").build('transit_realtime');
 var xhr;
@@ -48,19 +49,32 @@ function markVehicles() {
         var route = VehiclePosition.route;
         var delay = VehiclePosition.delay;
         var latLng = new google.maps.LatLng(position.latitude, position.longitude);
-        var marker = new google.maps.Marker({ position: latLng, map: map, title: route.route_short_name.concat(" - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")), icon: { path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z", anchor: new google.maps.Point(5, 5), size: new google.maps.Size(10, 10), origin: new google.maps.Point(5, 5), fillColor: "#".concat(route.route_color), fillOpacity: 100 } });
+        var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: route.route_short_name.concat(" - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")),
+            icon: {
+                path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z",
+                anchor: new google.maps.Point(5, 5),
+                size: new google.maps.Size(10, 10),
+                origin: new google.maps.Point(5, 5),
+                fillColor: "#".concat(route.route_color),
+                fillOpacity: 1
+            }
+        });
         marker.shape_id = trip.shape_id;
-        marker.route_color = route.route_color;
         google.maps.event.addListener(marker, 'click', (function (evt) {
-            selected_shape_id = this.shape_id;
-            selected_route_color = this.route_color;
+            selected_shape = this;
             map.data.setStyle(function (feature) {
                 var shape_id = feature.getProperty('shape_id');
+                var color = feature.getProperty('route_color');
                 return {
-                    strokeColor: "#".concat(selected_route_color),
-                    strokeOpacity: shape_id == selected_shape_id ? 1 : 0
+                    strokeColor: "#".concat(color),
+                    visible: shape_id == selected_shape.shape_id
                 }
             });
+            infoWindow.setContent (selected_shape.title);
+            infoWindow.open(map, this);
         }));
         bounds.extend(latLng);
         markers.add(marker);
@@ -117,7 +131,8 @@ function initialize() {
         map.data.setStyle(function (feature) {
             var color = feature.getProperty('route_color');
             return {
-                strokeOpacity: 0
+                strokeColor: "#".concat(color),
+                visible: false
             }
         });
     });
