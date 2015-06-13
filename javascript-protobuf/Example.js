@@ -3,8 +3,8 @@ Example real-time bus location map
 */
 var map;
 var bounds = new google.maps.LatLngBounds();
-var markers = new Set();
-var mapLabels = new Set();
+var markers = [];
+var mapLabels = [];
 var infoWindow = new google.maps.InfoWindow({ content: "" });
 var ProtoBuf = dcodeIO.ProtoBuf;
 var transit_realtime = ProtoBuf.loadProtoFile("javascript-protobuf/gtfs-realtime.proto").build('transit_realtime');
@@ -41,12 +41,15 @@ function getVehiclePosition(index) {
     return { position: position, vehicle: vehicle, trip: trip, route: route, delay: delay, stop_time: stop_time };
 }
 function markVehicles() {
-    markers.forEach(function (marker) {
-        marker.setMap(null);
-    });
-    mapLabels.forEach(function (mapLabel) {
-        mapLabel.setMap(null);
-    });
+    while (markers.length > 0) {
+        var marker = markers.pop();
+        marker.setMap(null)
+    }
+    while (mapLabels.length > 0) {
+        var mapLabel = mapLabels.pop();
+        mapLabel.setMap(null)
+    }
+    mapLabels = [];
     for (var index in VehiclePositionsFeedMessage.entity) {
         var VehiclePosition = getVehiclePosition(index);
         var position = VehiclePosition.position;
@@ -84,9 +87,10 @@ function markVehicles() {
             });
             infoWindow.setContent(selected_marker.title);
             infoWindow.open(map, this);
-            mapLabels.forEach(function (mapLabel) {
-                mapLabel.setMap(null);
-            });
+            while (mapLabels.length > 0) {
+                var mapLabel = mapLabels.pop();
+                mapLabel.setMap(null)
+            }
             for (var index in this.stop_time) {
                 try {
                     var stop_time = this.stop_time[index];
@@ -97,15 +101,15 @@ function markVehicles() {
                         map: map,
                         fontSize: 12,
                         align: 'center',
-                        fontColor:"#".concat(selected_marker.route.route_text_color),
+                        fontColor: "#".concat(selected_marker.route.route_text_color),
                         strokeColor: "#".concat(selected_marker.route.route_color)
                     });
-                    mapLabels.add(mapLabel);
+                    mapLabels.push(mapLabel);
                 } catch (e) { }
             }
         }));
         bounds.extend(latLng);
-        markers.add(marker);
+        markers.push(marker);
     }
     if (!initialPoisition) {
         map.fitBounds(bounds);
