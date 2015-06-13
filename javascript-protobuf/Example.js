@@ -138,6 +138,8 @@ function sendPositionRequest() {
 }
 function getStopTimesResponse() {
     stop_times = JSON.parse(this.responseText);
+    var scheduledstoptimesmessage = document.getElementById("scheduledstoptimesmessage");
+    scheduledstoptimesmessage.style.display = "inline";
 }
 function sendStopTimesRequest() {
     sendRequest("parsed/stop_times.json", "text", getStopTimesResponse);

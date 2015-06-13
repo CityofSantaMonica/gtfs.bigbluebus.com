@@ -43,7 +43,7 @@
     <h2 id="livemap">Live Map</h2>
     <ul>
         <li>Hover over bus (colored circle) for route, destination, bus number, and schedule adherance.</li>
-        <li>Click on bus (colored circle) to display route</li>
+        <li>Click on bus (colored circle) to display route<span id="scheduledstoptimesmessage" style="display: none"> and scheduled stop times</span>.</li>
         <li>Map refreshes every 20 seconds</li>
         <li>Busses update their locations in intervals of about 45 seconds</li>
     </ul>
