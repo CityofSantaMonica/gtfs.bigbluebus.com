@@ -26,7 +26,7 @@ function getTripUpdateDelay(entity_id, trip_id) {
     for (var index in TripUpdatesFeedMessage.entity) {
         var entity = TripUpdatesFeedMessage.entity[index];
         if (entity.id == entity_id && entity.trip_update.trip.trip_id == trip_id) {
-            return entity.trip_update.stop_time_update[0].arrival.delay / 60;
+            return -(entity.trip_update.stop_time_update[0].arrival.delay / 60);
         }
     }
 }
