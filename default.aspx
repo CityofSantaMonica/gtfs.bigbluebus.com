@@ -2,6 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContentPlaceHolder" runat="Server">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="https://googlemaps.github.io/js-map-label/src/maplabel-compiled.js"></script>
     <script src="javascript-protobuf/Long.js"></script>
     <script src="javascript-protobuf/ByteBufferAB.js"></script>
     <script src="javascript-protobuf/ProtoBuf.js"></script>

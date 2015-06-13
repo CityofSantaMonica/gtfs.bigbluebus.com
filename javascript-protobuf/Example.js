@@ -4,17 +4,19 @@ Example real-time bus location map
 var map;
 var bounds = new google.maps.LatLngBounds();
 var markers = new Set();
+var mapLabels = new Set();
 var infoWindow = new google.maps.InfoWindow({ content: "" });
 var ProtoBuf = dcodeIO.ProtoBuf;
 var transit_realtime = ProtoBuf.loadProtoFile("javascript-protobuf/gtfs-realtime.proto").build('transit_realtime');
-var xhr;
 var initialPoisition = false;
 var routes;
 var trips;
+var stops;
+var stop_times;
 var VehiclePositionsFeedMessage;
 var TripUpdatesFeedMessage;
 function sendRequest(path, responseType, handler) {
-    xhr = ProtoBuf.Util.XHR();
+    var xhr = ProtoBuf.Util.XHR();
     xhr.open("GET", path, true);
     xhr.responseType = responseType;
     xhr.onload = handler;
@@ -32,14 +34,18 @@ function getVehiclePosition(index) {
     var entity = VehiclePositionsFeedMessage.entity[index];
     var trip = trips[entity.vehicle.trip.trip_id];
     var route = routes[trip.route_id];
+    var stop_time = stop_times == undefined ? undefined : stop_times[trip.trip_id];
     var position = entity.vehicle.position;
     var vehicle = entity.vehicle.vehicle;
     var delay = getTripUpdateDelay(entity.id, trip.trip_id);
-    return { position: position, vehicle: vehicle, trip: trip, route: route, delay: delay };
+    return { position: position, vehicle: vehicle, trip: trip, route: route, delay: delay, stop_time: stop_time };
 }
 function markVehicles() {
     markers.forEach(function (marker) {
         marker.setMap(null);
+    });
+    mapLabels.forEach(function (mapLabel) {
+        mapLabel.setMap(null);
     });
     for (var index in VehiclePositionsFeedMessage.entity) {
         var VehiclePosition = getVehiclePosition(index);
@@ -48,6 +54,7 @@ function markVehicles() {
         var trip = VehiclePosition.trip;
         var route = VehiclePosition.route;
         var delay = VehiclePosition.delay;
+        var stop_time = VehiclePosition.stop_time;
         var latLng = new google.maps.LatLng(position.latitude, position.longitude);
         var marker = new google.maps.Marker({
             position: latLng,
@@ -63,6 +70,7 @@ function markVehicles() {
             }
         });
         marker.shape_id = trip.shape_id;
+        marker.stop_time = stop_time;
         google.maps.event.addListener(marker, 'click', (function (evt) {
             selected_shape = this;
             map.data.setStyle(function (feature) {
@@ -73,8 +81,25 @@ function markVehicles() {
                     visible: shape_id == selected_shape.shape_id
                 }
             });
-            infoWindow.setContent (selected_shape.title);
+            infoWindow.setContent(selected_shape.title);
             infoWindow.open(map, this);
+            mapLabels.forEach(function (mapLabel) {
+                mapLabel.setMap(null);
+            });
+            for (var index in this.stop_time) {
+                try {
+                    var stop_time = this.stop_time[index];
+                    var stop = stops[stop_time.stop_id];
+                    var mapLabel = new MapLabel({
+                        text: stop_time.arrival_time.substring(0, 5),
+                        position: new google.maps.LatLng(stop.stop_lat, stop.stop_lon),
+                        map: map,
+                        fontSize: 12,
+                        align: 'center'
+                    });
+                    mapLabels.add(mapLabel);
+                } catch (e) { }
+            }
         }));
         bounds.extend(latLng);
         markers.add(marker);
@@ -86,7 +111,7 @@ function markVehicles() {
 };
 function getUpdateResponse() {
     try {
-        TripUpdatesFeedMessage = transit_realtime.FeedMessage.decode(xhr.response);
+        TripUpdatesFeedMessage = transit_realtime.FeedMessage.decode(this.response);
         markVehicles();
     }
     catch (e) {
@@ -98,7 +123,7 @@ function sendUpdateRequest() {
 }
 function getPositionResponse() {
     try {
-        VehiclePositionsFeedMessage = transit_realtime.FeedMessage.decode(xhr.response);
+        VehiclePositionsFeedMessage = transit_realtime.FeedMessage.decode(this.response);
         sendUpdateRequest();
     }
     catch (e) {
@@ -108,8 +133,22 @@ function getPositionResponse() {
 function sendPositionRequest() {
     sendRequest("vehiclepositions.bin", "arraybuffer", getPositionResponse);
 }
+function getStopTimesResponse() {
+    stop_times = JSON.parse(this.responseText);
+}
+function sendStopTimesRequest() {
+    sendRequest("parsed/stop_times.json", "text", getStopTimesResponse);
+}
+function getStopsResponse() {
+    stops = JSON.parse(this.responseText);
+    sendStopTimesRequest();
+}
+function sendStopsRequest() {
+    sendRequest("parsed/stops.json", "text", getStopsResponse);
+}
 function getTripsResponse() {
-    trips = JSON.parse(xhr.responseText);
+    trips = JSON.parse(this.responseText);
+    sendStopsRequest();
     sendPositionRequest();
     window.setInterval(function () {
         sendPositionRequest();
@@ -119,7 +158,7 @@ function sendTripsRequest() {
     sendRequest("parsed/trips.json", "text", getTripsResponse);
 }
 function getRoutesResponse() {
-    routes = JSON.parse(xhr.responseText);
+    routes = JSON.parse(this.responseText);
     sendTripsRequest();
 }
 function sendRoutesRequest() {
