@@ -161,7 +161,7 @@ function getTripsResponse() {
     sendPositionRequest();
     window.setInterval(function () {
         sendPositionRequest();
-    }, 20000);
+    }, 30000);
 }
 function sendTripsRequest() {
     sendRequest("parsed/trips.json", "text", getTripsResponse);
