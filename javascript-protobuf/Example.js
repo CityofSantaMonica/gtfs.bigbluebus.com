@@ -52,7 +52,7 @@ function markVehicles() {
         var marker = new google.maps.Marker({
             position: latLng,
             map: map,
-            title: route.route_short_name.concat(" - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")),
+            title: route.route_short_name.concat(" - ", trip.trip_headsign, " - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")),
             icon: {
                 path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z",
                 anchor: new google.maps.Point(5, 5),
