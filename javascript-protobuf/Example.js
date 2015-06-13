@@ -71,17 +71,18 @@ function markVehicles() {
         });
         marker.shape_id = trip.shape_id;
         marker.stop_time = stop_time;
+        marker.route = route;
         google.maps.event.addListener(marker, 'click', (function (evt) {
-            selected_shape = this;
+            selected_marker = this;
             map.data.setStyle(function (feature) {
                 var shape_id = feature.getProperty('shape_id');
                 var color = feature.getProperty('route_color');
                 return {
                     strokeColor: "#".concat(color),
-                    visible: shape_id == selected_shape.shape_id
+                    visible: shape_id == selected_marker.shape_id
                 }
             });
-            infoWindow.setContent(selected_shape.title);
+            infoWindow.setContent(selected_marker.title);
             infoWindow.open(map, this);
             mapLabels.forEach(function (mapLabel) {
                 mapLabel.setMap(null);
@@ -95,7 +96,9 @@ function markVehicles() {
                         position: new google.maps.LatLng(stop.stop_lat, stop.stop_lon),
                         map: map,
                         fontSize: 12,
-                        align: 'center'
+                        align: 'center',
+                        fontColor:"#".concat(selected_marker.route.route_text_color),
+                        strokeColor: "#".concat(selected_marker.route.route_color)
                     });
                     mapLabels.add(mapLabel);
                 } catch (e) { }
