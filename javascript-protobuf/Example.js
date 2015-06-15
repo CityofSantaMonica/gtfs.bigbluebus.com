@@ -101,8 +101,8 @@ function markVehicles() {
                         map: map,
                         fontSize: 12,
                         align: 'center',
-                        fontColor: "#".concat(selected_marker.route.route_text_color),
-                        strokeColor: "#".concat(selected_marker.route.route_color)
+                        fontColor: "#ffffff" /*.concat(selected_marker.route.route_text_color)*/,
+                        strokeColor: "#666666" /*.concat(selected_marker.route.route_color)*/
                     });
                     mapLabels.push(mapLabel);
                 } catch (e) { }
