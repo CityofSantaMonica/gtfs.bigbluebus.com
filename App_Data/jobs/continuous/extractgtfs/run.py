@@ -2,11 +2,13 @@ import itertools
 import json
 import operator
 import os
+import StringIO
 import sys
 from time import sleep
 import xml.etree.cElementTree as ET
 import zipfile
 
+import shapefile
 import transitfeed
 
 parsedpath = "/home/site/wwwroot/parsed"
@@ -55,7 +57,7 @@ while True:
                 forJson[trip.trip_id] = {"route_id" : trip.route_id, "service_id" : trip.service_id, "trip_id" : trip.trip_id, "trip_headsign" : trip.trip_headsign, "trip_short_name" : trip.trip_short_name, "direction_id" : trip.direction_id, "block_id" : trip.block_id, "shape_id" : trip.shape_id, "wheelchair_accessible" : trip.wheelchair_accessible, "bikes_allowed" : trip.bikes_allowed }
             json.dump(forJson, open(os.path.join(parsedpath, "trips.json"),"w"))
 
-            #trips.txt
+            #stop_times.txt
             forJson = {}
             for trip in schedule.GetTripList():
                 stop_times = {}
@@ -107,7 +109,7 @@ while True:
                 trip = next(trips)
                 route = schedule.GetRoute(trip.route_id)
                 shape = schedule.GetShape(shape_id)
-                feature = {"type": "Feature", "properties": { "shape_id" : shape.shape_id, "direction_id" : trip.direction_id, "route_short_name" : route.route_short_name, "route_long_name" : route.route_long_name, "route_color" : route.route_color }, "geometry" : { "type": "LineString","coordinates": [[point[1], point[0]] for point in shape.points] } }
+                feature = {"type": "Feature", "properties": { "shape_id" : shape.shape_id, "direction_id" : trip.direction_id, "trip_headsign" : trip.trip_headsign, "route_short_name" : route.route_short_name, "route_long_name" : route.route_long_name, "route_color" : route.route_color }, "geometry" : { "type": "LineString","coordinates": [[point[1], point[0]] for point in shape.points] } }
                 features.append(feature)
             forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }, "features": features }
             json.dump(forJson, open(os.path.join(parsedpath, "shapes.geojson"),"w"))
@@ -131,6 +133,7 @@ while True:
             schema = ET.SubElement(document, "{http://www.opengis.net/kml/2.2}Schema", {"name":"shapes", "id":"shapes"})
             ET.SubElement(schema,"{http://www.opengis.net/kml/2.2}SimpleField", {"name":"shape_id", "type":"string"})
             ET.SubElement(schema,"{http://www.opengis.net/kml/2.2}SimpleField", {"name":"direction_id", "type":"string"})
+            ET.SubElement(schema,"{http://www.opengis.net/kml/2.2}SimpleField", {"name":"trip_headsign", "type":"string"})
             ET.SubElement(schema,"{http://www.opengis.net/kml/2.2}SimpleField", {"name":"route_short_name", "type":"string"})
             ET.SubElement(schema,"{http://www.opengis.net/kml/2.2}SimpleField", {"name":"route_long_name", "type":"string"})
             ET.SubElement(schema,"{http://www.opengis.net/kml/2.2}SimpleField", {"name":"route_color", "type":"string"})
@@ -152,6 +155,7 @@ while True:
                 schemadata = ET.SubElement(extendeddata, "{http://www.opengis.net/kml/2.2}SchemaData", {"schemaUrl": "#shapes"})
                 ET.SubElement(schemadata,"{http://www.opengis.net/kml/2.2}SimpleData", {"name":"shape_id"}).text = shape.shape_id
                 ET.SubElement(schemadata,"{http://www.opengis.net/kml/2.2}SimpleData", {"name":"direction_id"}).text = trip.direction_id
+                ET.SubElement(schemadata,"{http://www.opengis.net/kml/2.2}SimpleData", {"name":"trip_headsign"}).text = trip.trip_headsign
                 ET.SubElement(schemadata,"{http://www.opengis.net/kml/2.2}SimpleData", {"name":"route_short_name"}).text = route.route_short_name
                 ET.SubElement(schemadata,"{http://www.opengis.net/kml/2.2}SimpleData", {"name":"route_long_name"}).text = route.route_long_name
                 ET.SubElement(schemadata,"{http://www.opengis.net/kml/2.2}SimpleData", {"name":"route_color"}).text = route.route_color
@@ -183,6 +187,61 @@ while True:
                 ET.SubElement(point, "{http://www.opengis.net/kml/2.2}coordinates").text = '%.6f,%.6f' % (stop.stop_lon, stop.stop_lat)
             tree = ET.ElementTree(kml)
             tree.write(os.path.join(parsedpath, "stops.kml"), xml_declaration=True, encoding='utf-8', method="xml")
+
+            #export gis files in kml
+            prj = 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]'
+
+            #export shapes
+            shp = StringIO.StringIO()
+            shx = StringIO.StringIO()
+            dbf = StringIO.StringIO()
+            writer = shapefile.Writer(shapefile.POLYLINE)
+            writer.field("shape_id", "C", "6")
+            writer.field("direction", "C", "1")
+            writer.field("headsign", "C", "64")
+            writer.field("short_name", "C", "4")
+            writer.field("long_name", "C", "64")
+            writer.field("color", "C", "6")
+            tripList = schedule.GetTripList()
+            sortedTrips = sorted(tripList, key=lambda item: item.shape_id)
+            for shape_id, trips in itertools.groupby(sortedTrips, key=lambda item: item.shape_id):
+                trip = next(trips)
+                route = schedule.GetRoute(trip.route_id)
+                shape = schedule.GetShape(shape_id)
+                writer.line(parts=[[[point[1], point[0]] for point in shape.points]])
+                writer.record(shape.shape_id, trip.direction_id, trip.trip_headsign, route.route_short_name, route.route_long_name, route.route_color)
+            writer.saveShp(shp)
+            writer.saveShx(shx)
+            writer.saveDbf(dbf)
+            zipFile = zipfile.ZipFile(os.path.join(parsedpath, "shapes.zip"), "w", zipfile.ZIP_DEFLATED)
+            zipFile.writestr("shapes.shp", shp.getvalue())
+            zipFile.writestr("shapes.shx", shx.getvalue())
+            zipFile.writestr("shapes.dbf", dbf.getvalue())
+            zipFile.writestr("shapes.prj", prj)
+            zipFile.close()
+
+            #export stops
+            shp = StringIO.StringIO()
+            shx = StringIO.StringIO()
+            dbf = StringIO.StringIO()
+            writer = shapefile.Writer(shapefile.POINT)
+            writer.field("stop_id", "C", "4")
+            writer.field("stop_code", "C", "4")
+            writer.field("stop_name", "C", "64")
+            writer.field("stop_desc", "C", "64")
+            stopList = schedule.GetStopList()
+            for stop in stopList:
+                writer.point(stop.stop_lon, stop.stop_lat)
+                writer.record(stop.stop_id, stop.stop_code, stop.stop_name, stop.stop_desc)
+            writer.saveShp(shp)
+            writer.saveShx(shx)
+            writer.saveDbf(dbf)
+            zipFile = zipfile.ZipFile(os.path.join(parsedpath, "stops.zip"), "w", zipfile.ZIP_DEFLATED)
+            zipFile.writestr("stops.shp", shp.getvalue())
+            zipFile.writestr("stops.shx", shx.getvalue())
+            zipFile.writestr("stops.dbf", dbf.getvalue())
+            zipFile.writestr("stops.prj", prj)
+            zipFile.close()
 
         previous_mtime = currentzipstat.st_mtime
     else:
