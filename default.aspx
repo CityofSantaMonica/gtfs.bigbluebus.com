@@ -62,5 +62,7 @@
     <uc1:ParsedFileList runat="server" id="ParsedFileListGeoJSON" Extension=".geojson" />
     <h3>KML files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListKML" Extension=".kml" />
+    <h3>Shapefiles in ZIP</h3>
+    <uc1:ParsedFileList runat="server" id="ParsedFileList1" Extension=".zip" />
 </asp:Content>
 
