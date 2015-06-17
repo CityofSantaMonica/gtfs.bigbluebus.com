@@ -45,6 +45,7 @@
     </table>
     <h2 id="livemap">Live Map</h2>
     <p>This map is example code for the developer community.</p>
+    <p>The source code is available on <a href="https://github.com/CityofSantaMonica/gtfs.bigbluebus.com/tree/master/javascript-protobuf">GitHub</a></p>
     <ul>
         <li>Hover over bus (colored circle) for route, destination, bus number, and schedule adherance.</li>
         <li>Click on bus (colored circle) to display route<span id="scheduledstoptimesmessage" style="display: none"> and scheduled stop times</span>.</li>
