@@ -43,7 +43,7 @@
             </asp:Repeater>
         </tbody>
     </table>
-    <h2 id="livemap">Live Map</h2>
+    <h2 id="livemap">Example Live Map</h2>
     <p>This map is example code for the developer community.</p>
     <p>The source code is available on <a href="https://github.com/CityofSantaMonica/gtfs.bigbluebus.com/tree/master/javascript-protobuf">GitHub</a></p>
     <ul>
