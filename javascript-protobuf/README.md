@@ -13,3 +13,4 @@ Source File | File Format
 [trips.json](http://gtfs.bigbluebus.com/parsed/trips.json) | [JSON](https://en.wikipedia.org/wiki/JSON)
 [stops.json](http://gtfs.bigbluebus.com/parsed/stops.json) | [JSON](https://en.wikipedia.org/wiki/JSON)
 [stop_times.json](http://gtfs.bigbluebus.com/parsed/stop_times.json) | [JSON](https://en.wikipedia.org/wiki/JSON)
+[shapes.geojson](http://gtfs.bigbluebus.com/parsed/shapes.geojson) | [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)
