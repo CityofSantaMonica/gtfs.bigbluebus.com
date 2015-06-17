@@ -64,7 +64,7 @@ function markVehicles() {
             map: map,
             title: route.route_short_name.concat(" - ", trip.trip_headsign, " - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")),
             icon: {
-                path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z",
+                path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z", // SVG path draws circle
                 anchor: new google.maps.Point(5, 5),
                 size: new google.maps.Size(10, 10),
                 origin: new google.maps.Point(5, 5),
@@ -101,8 +101,8 @@ function markVehicles() {
                         map: map,
                         fontSize: 12,
                         align: 'center',
-                        fontColor: "#ffffff" /*.concat(selected_marker.route.route_text_color)*/,
-                        strokeColor: "#666666" /*.concat(selected_marker.route.route_color)*/
+                        fontColor: "#ffffff",
+                        strokeColor: "#666666"
                     });
                     mapLabels.push(mapLabel);
                 } catch (e) { }
@@ -162,10 +162,13 @@ function sendStopsRequest() {
 function getTripsResponse() {
     try {
         trips = JSON.parse(this.responseText);
+        // if not Android or iPhone, request stops and stop_times
         if (!(navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i)))
             sendStopsRequest();
+        // start requesting GTFS real time protocol buffers 
         sendPositionRequest();
         window.setInterval(function () {
+            // repeat this every 30 seconds
             sendPositionRequest();
         }, 30000);
     } catch (e) { }
@@ -183,7 +186,9 @@ function sendRoutesRequest() {
     sendRequest("parsed/routes.json", "text", getRoutesResponse);
 }
 function initialize() {
+    // create Google Map
     map = new google.maps.Map(document.getElementById("example-map"), { center: new google.maps.LatLng(34.013776, -118.492043), zoom: 15 });
+    // load GeoJSON of routes to be shown when bus is selected
     map.data.loadGeoJson('http://gtfs.bigbluebus.com/parsed/shapes.geojson', null, function () {
         map.data.setStyle(function (feature) {
             var color = feature.getProperty('route_color');
@@ -193,8 +198,11 @@ function initialize() {
             }
         });
     });
+    // use transit layer to provider better color contrast with transit routes
     var transitLayer = new google.maps.TransitLayer();
     transitLayer.setMap(map);
+    // begin requests for JSON files: routes, trips, stops, stop_times
+    // work your way up this JavaScript file for the rest of the process
     sendRoutesRequest();
 }
 google.maps.event.addDomListener(window, 'load', initialize);
