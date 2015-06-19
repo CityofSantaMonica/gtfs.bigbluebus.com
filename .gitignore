@@ -197,3 +197,4 @@ FakesAssemblies/
 *.bin
 *.zip
 *.pyc
+parsed/
