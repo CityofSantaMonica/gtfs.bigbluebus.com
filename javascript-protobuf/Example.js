@@ -7,16 +7,18 @@ var markers = [];
 var mapLabels = [];
 var infoWindow = new google.maps.InfoWindow({ content: "" });
 var ProtoBuf = dcodeIO.ProtoBuf;
-var transit_realtime = ProtoBuf.loadProtoFile("javascript-protobuf/gtfs-realtime.proto").build('transit_realtime');
+var transit_realtime = ProtoBuf.loadProtoFile("javascript-protobuf/gtfs-realtime.proto").build('transit_realtime'); // "transit_realtime" is the package name inside the proto file
 var initialPoisition = false;
+var VehiclePositionsFeedMessage;
+var TripUpdatesFeedMessage;
+// these variables will have the GTFS JSON data
 var routes;
 var trips;
 var stops;
 var stop_times;
-var VehiclePositionsFeedMessage;
-var TripUpdatesFeedMessage;
+
 function sendRequest(path, responseType, handler) {
-    var xhr = ProtoBuf.Util.XHR();
+    var xhr = ProtoBuf.Util.XHR(); // browser specific XHR
     xhr.open("GET", path, true);
     xhr.responseType = responseType;
     xhr.onload = handler;
@@ -26,7 +28,7 @@ function getTripUpdateDelay(entity_id, trip_id) {
     for (var index in TripUpdatesFeedMessage.entity) {
         var entity = TripUpdatesFeedMessage.entity[index];
         if (entity.id == entity_id && entity.trip_update.trip.trip_id == trip_id) {
-            return -(entity.trip_update.stop_time_update[0].arrival.delay / 60);
+            return -(entity.trip_update.stop_time_update[0].arrival.delay / 60); // invert delay time so that it represents ahead or behind schedule
         }
     }
 }
@@ -41,10 +43,12 @@ function getVehiclePosition(index) {
     return { position: position, vehicle: vehicle, trip: trip, route: route, delay: delay, stop_time: stop_time };
 }
 function markVehicles() {
+    // clear previous vehicle positions
     while (markers.length > 0) {
         var marker = markers.pop();
         marker.setMap(null)
     }
+    // clear previous scheduled stop times (if there were any)
     while (mapLabels.length > 0) {
         var mapLabel = mapLabels.pop();
         mapLabel.setMap(null)
@@ -64,7 +68,7 @@ function markVehicles() {
             map: map,
             title: route.route_short_name.concat(" - ", trip.trip_headsign, " - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")),
             icon: {
-                path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z", // SVG path draws circle
+                path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z", // SVG path draws circle that can be filled with route color
                 anchor: new google.maps.Point(5, 5),
                 size: new google.maps.Size(10, 10),
                 origin: new google.maps.Point(5, 5),
@@ -117,37 +121,46 @@ function markVehicles() {
     }
 };
 function getUpdateResponse() {
+    // decode the protocol buffers data
     try {
         TripUpdatesFeedMessage = transit_realtime.FeedMessage.decode(this.response);
+        // we have all the data needed to update the map
         markVehicles();
     }
+    // there is an error in the data, we wait for the next cycle to get fresh data
     catch (e) {
 
     }
 }
 function sendUpdateRequest() {
+    // this is a protocol buffers file
     sendRequest("tripupdates.bin", "arraybuffer", getUpdateResponse);
 }
 function getPositionResponse() {
+    // decode the protocol buffers data
     try {
         VehiclePositionsFeedMessage = transit_realtime.FeedMessage.decode(this.response);
         sendUpdateRequest();
     }
+    // there is an error in the data, we wait for the next cycle to get fresh data
     catch (e) {
 
     }
 }
 function sendPositionRequest() {
+    // this is a protocol buffers file
     sendRequest("vehiclepositions.bin", "arraybuffer", getPositionResponse);
 }
 function getStopTimesResponse() {
     try {
         stop_times = JSON.parse(this.responseText);
+        // update the page to indicate that scheduled stop times are now available
         var scheduledstoptimesmessage = document.getElementById("scheduledstoptimesmessage");
         scheduledstoptimesmessage.style.display = "inline";
     } catch (e) { }
 }
 function sendStopTimesRequest() {
+    // this will take some time...
     sendRequest("parsed/stop_times.json", "text", getStopTimesResponse);
 }
 function getStopsResponse() {
