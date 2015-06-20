@@ -86,6 +86,7 @@ function markVehicles() {
                 var color = feature.getProperty('route_color');
                 return {
                     strokeColor: "#".concat(color),
+                    strokeOpacity: 0.66,
                     visible: shape_id == selected_marker.shape_id
                 }
             });
