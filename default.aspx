@@ -45,7 +45,7 @@
     </table>
     <h2 id="livemap">Example Live Map</h2>
     <p>This map is example code for the developer community.</p>
-    <p>The source code is available on <a href="https://github.com/CityofSantaMonica/gtfs.bigbluebus.com/tree/master/javascript-protobuf">GitHub</a></p>
+    <p>The source code is available on <a href="https://github.com/CityofSantaMonica/gtfs.bigbluebus.com/tree/master/javascript-protobuf" target="_blank">GitHub</a></p>
     <ul>
         <li>Hover over bus (colored circle) for route, destination, bus number, and schedule adherance.</li>
         <li>Click on bus (colored circle) to display route<span id="scheduledstoptimesmessage" style="display: none"> and scheduled stop times</span>.</li>
@@ -55,6 +55,7 @@
     <div id="example-map" style="width: 100%; height: 480px"></div>
     <h2>Parsed Data Files</h2>
     <p>Each time the static GTFS file is updated (current.zip) the server will parse it into data files that can be accessed directly.</p>
+    <p>The source code is available on <a href="https://github.com/CityofSantaMonica/gtfs.bigbluebus.com/tree/master/App_Data/jobs/continuous/extractgtfs" target="_blank">GitHub</a></p>
     <h3>CSV files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListTXT" Extension=".txt" />
     <h3>JSON files</h3>
