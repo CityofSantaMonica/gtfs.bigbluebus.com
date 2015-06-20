@@ -188,7 +188,7 @@ while True:
             tree = ET.ElementTree(kml)
             tree.write(os.path.join(parsedpath, "stops.kml"), xml_declaration=True, encoding='utf-8', method="xml")
 
-            #export gis files in kml
+            #export gis files in shapefile format and save in ZIP file
             prj = 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]'
 
             #export shapes
