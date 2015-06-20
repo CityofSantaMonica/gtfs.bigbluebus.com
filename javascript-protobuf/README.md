@@ -2,6 +2,8 @@
 
 This JavaScript example uses the [ProtoBuf library](https://github.com/dcodeIO/ProtoBuf.js) from [dcodeIO](https://github.com/dcodeIO).
 
+The code for the example map is in [Example.js](https://github.com/CityofSantaMonica/gtfs.bigbluebus.com/blob/master/javascript-protobuf/Example.js).
+
 Source files used are:
 
 Source File | File Format
