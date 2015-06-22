@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="gtfs"
+    targetNamespace="http://gtfs.bigbluebus.com/gtfs.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://gtfs.bigbluebus.com/gtfs.xsd"
+    xmlns:mstns="http://gtfs.bigbluebus.com/gtfs.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="gtfs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="agencies" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="agency">
+                <xs:complexType>
+                  <xs:attribute name="agency_id" type="xs:string" use="optional" />
+                  <xs:attribute name="agency_name" type="xs:string" use="required" />
+                  <xs:attribute name="agency_url" type="xs:string" use="required" />
+                  <xs:attribute name="agency_timezone" type="xs:string" use="required" />
+                  <xs:attribute name="agency_lang" type="xs:string" use="optional" />
+                  <xs:attribute name="agency_phone" type="xs:string" use="optional" />
+                  <xs:attribute name="agency_fare_url" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="stops" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="stop">
+                <xs:complexType>
+                  <xs:attribute name="stop_id" type="xs:string" use="required" />
+                  <xs:attribute name="stop_code" type="xs:string" use="optional" />
+                  <xs:attribute name="stop_name" type="xs:string" use="required" />
+                  <xs:attribute name="stop_desc" type="xs:string" use="optional" />
+                  <xs:attribute name="stop_lat" type="xs:decimal" use="required" />
+                  <xs:attribute name="stop_lon" type="xs:decimal" use="required" />
+                  <xs:attribute name="zone_id" type="xs:string" use="optional" />
+                  <xs:attribute name="stop_url" type="xs:string" use="optional" />
+                  <xs:attribute name="location_type" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="parent_station" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="stop_timezone" type="xs:string" use="optional" />
+                  <xs:attribute name="wheelchair_boarding" type="xs:unsignedByte" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="routes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="route">
+                <xs:complexType>
+                  <xs:attribute name="route_id" type="xs:string" use="required" />
+                  <xs:attribute name="agency_id" type="xs:string" use="optional" />
+                  <xs:attribute name="route_short_name" type="xs:string" use="required" />
+                  <xs:attribute name="route_long_name" type="xs:string" use="required" />
+                  <xs:attribute name="route_desc" type="xs:string" use="optional" />
+                  <xs:attribute name="route_type" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="route_url" type="xs:string" use="optional" />
+                  <xs:attribute name="route_color" type="xs:string" use="optional" />
+                  <xs:attribute name="route_text_color" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="trips" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="trip">
+                <xs:complexType>
+                  <xs:attribute name="route_id" type="xs:string" use="required" />
+                  <xs:attribute name="service_id" type="xs:string" use="required" />
+                  <xs:attribute name="trip_id" type="xs:string" use="required" />
+                  <xs:attribute name="trip_headsign" type="xs:string" use="optional" />
+                  <xs:attribute name="trip_short_name" type="xs:string" use="optional" />
+                  <xs:attribute name="direction_id" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="block_id" type="xs:string" use="optional" />
+                  <xs:attribute name="shape_id" type="xs:string" use="optional" />
+                  <xs:attribute name="bikes_allowed" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="wheelchair_accessible" type="xs:unsignedByte" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="stop_times" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="stop_time">
+                <xs:complexType>
+                  <xs:attribute name="trip_id" type="xs:string" use="required" />
+                  <xs:attribute name="arrival_time" type="xs:time" use="required" />
+                  <xs:attribute name="departure_time" type="xs:time" use="required" />
+                  <xs:attribute name="stop_id" type="xs:string" use="required" />
+                  <xs:attribute name="stop_sequence" type="xs:unsignedShort" use="required" />
+                  <xs:attribute name="stop_headsign" type="xs:string" use="optional" />
+                  <xs:attribute name="pickup_type" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="drop_off_type" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="shape_dist_traveled" type="xs:double" use="optional" />
+                  <xs:attribute name="timepoint" type="xs:unsignedByte" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="calendar" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="service">
+                <xs:complexType>
+                  <xs:attribute name="service_id" type="xs:string" use="required" />
+                  <xs:attribute name="monday" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="tuesday" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="wednesday" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="thursday" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="friday" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="saturday" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="sunday" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="start_date" type="xs:unsignedInt" use="required" />
+                  <xs:attribute name="end_date" type="xs:unsignedInt" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="calendar_dates" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="calendar_date">
+                <xs:complexType>
+                  <xs:attribute name="service_id" type="xs:string" use="required" />
+                  <xs:attribute name="date" type="xs:unsignedInt" use="required" />
+                  <xs:attribute name="exception_type" type="xs:unsignedByte" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fare_attributes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="fare_attribute">
+                <xs:complexType>
+                  <xs:attribute name="fare_id" type="xs:string" use="required" />
+                  <xs:attribute name="price" type="xs:decimal" use="required" />
+                  <xs:attribute name="currency_type" type="xs:string" use="required" />
+                  <xs:attribute name="payment_method" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="transfers" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="transfer_duration" type="xs:unsignedInt" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="fare_rules" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="fare_rule">
+                <xs:complexType>
+                  <xs:attribute name="fare_id" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="route_id" type="xs:string" use="optional" />
+                  <xs:attribute name="origin_id" type="xs:string" use="optional" />
+                  <xs:attribute name="destination_id" type="xs:string" use="optional" />
+                  <xs:attribute name="contains_id" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="shapes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="shape">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="shape_pt">
+                      <xs:complexType>
+                        <xs:attribute name="shape_pt_lat" type="xs:decimal" use="required" />
+                        <xs:attribute name="shape_pt_lon" type="xs:decimal" use="required" />
+                        <xs:attribute name="shape_dist_traveled" type="xs:double" use="optional" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="shape_id" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
