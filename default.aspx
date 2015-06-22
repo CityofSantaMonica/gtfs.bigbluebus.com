@@ -62,6 +62,7 @@
     <h3>JSON files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListJSON" Extension=".json" />
     <h3>XML files</h3>
+    <p>The current schema for the XML files is available in <a href="gtfs.xsd">gtfs.xsd</a>.</p>
     <uc1:ParsedFileList runat="server" id="ParsedFileListXML" Extension=".xml" />
     <h2>GIS files</h2>
     <h3>GeoJSON files</h3>
