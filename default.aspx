@@ -54,12 +54,15 @@
     </ul>
     <div id="example-map" style="width: 100%; height: 480px"></div>
     <h2>Parsed Data Files</h2>
-    <p>Each time the static GTFS file is updated (current.zip) the server will parse it into data files that can be accessed directly.</p>
+    <p>Each time the static GTFS file is updated (current.zip) the server will parse it into data files that can be accessed directly for example purposes.</p>
+    <p>Be aware that the formats of the parsed files are subject to change.</p>
     <p>The source code is available on <a href="https://github.com/CityofSantaMonica/gtfs.bigbluebus.com/tree/master/App_Data/jobs/continuous/extractgtfs" target="_blank">GitHub</a></p>
     <h3>CSV files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListTXT" Extension=".txt" />
     <h3>JSON files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListJSON" Extension=".json" />
+    <h3>XML files</h3>
+    <uc1:ParsedFileList runat="server" id="ParsedFileListXML" Extension=".xml" />
     <h2>GIS files</h2>
     <h3>GeoJSON files</h3>
     <uc1:ParsedFileList runat="server" id="ParsedFileListGeoJSON" Extension=".geojson" />
