@@ -3,6 +3,7 @@
 <%@ Register Src="~/ParsedFileList.ascx" TagPrefix="uc1" TagName="ParsedFileList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContentPlaceHolder" runat="Server">
+    <link rel="alternate" type="application/rss+xml" href="rss.xml" title="Updates" />
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src="https://googlemaps.github.io/js-map-label/src/maplabel-compiled.js"></script>
     <script src="javascript-protobuf/Long.js"></script>
