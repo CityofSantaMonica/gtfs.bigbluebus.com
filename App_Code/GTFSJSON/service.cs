@@ -14,7 +14,7 @@ namespace GTFSJSON
     {
         [DataMember]
         public String service_id { get; set; }
-        [DataMember(Name="monday")]
+        [DataMember(Name = "monday")]
         public String monday_string { get; set; }
         public Boolean monday { get; set; }
         [DataMember(Name = "tuesday")]
@@ -57,6 +57,11 @@ namespace GTFSJSON
             if (DateTime.TryParseExact(this.end_date_string, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out test))
                 this.end_date = test;
         }
+        public service()
+        {
+            trips = new trips();
+        }
+        public trips trips { get; set; }
     }
     public class services : Dictionary<String, service>
     {

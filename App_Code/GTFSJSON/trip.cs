@@ -33,6 +33,12 @@ namespace GTFSJSON
     }
     public class trips : Dictionary<String, trip>
     {
-
+        public void Join(services services)
+        {
+            this.Values.ToList().ForEach(trip => { 
+                trip.service = services[trip.service_id]; 
+                trip.service.trips.Add(trip.trip_id, trip); 
+            });
+        }
     }
 }
