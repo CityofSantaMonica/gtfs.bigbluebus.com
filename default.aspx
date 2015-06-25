@@ -50,8 +50,8 @@
     <ul>
         <li>Hover over bus (colored circle) for route, destination, bus number, and schedule adherance.</li>
         <li>Click on bus (colored circle) to display route<span id="scheduledstoptimesmessage" style="display: none"> and scheduled stop times</span>.</li>
-        <li>Map refreshes every 30 seconds</li>
-        <li>Busses update their locations in intervals of about 45 seconds</li>
+        <li>Map refreshes every 30 seconds.</li>
+        <li>Busses update their locations about once a minute.</li>
     </ul>
     <div id="example-map" style="width: 100%; height: 480px"></div>
     <h2>Parsed Data Files</h2>
