@@ -11,6 +11,7 @@ namespace GTFSJSON
 {
     public class gtfs
     {
+        private stop_times_trips stop_times_trips { get; set; }
         public gtfs(HttpContext context)
         {
             var serializer = new Newtonsoft.Json.JsonSerializer();
@@ -48,7 +49,6 @@ namespace GTFSJSON
         public routes routes { get; set; }
         public services services { get; set; }
         public stops stops { get; set; }
-        public stop_times_trips stop_times_trips { get; set; }
         public trips trips { get; set; }
     }
 }
