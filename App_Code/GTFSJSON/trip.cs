@@ -29,15 +29,31 @@ namespace GTFSJSON
         public String wheelchair_accessible { get; set; }
         [DataMember]
         public String bikes_allowed { get; set; }
+
+        public route route { get; set; }
         public service service { get; set; }
+        public stop_times_sequence stop_times_sequence { get; set; }
     }
     public class trips : Dictionary<String, trip>
     {
+        public void Join(routes routes)
+        {
+            this.Values.ToList().ForEach(trip => {
+                trip.route = routes[trip.route_id];
+                trip.route.trips.Add(trip.trip_id, trip); 
+            });
+        }
         public void Join(services services)
         {
             this.Values.ToList().ForEach(trip => { 
                 trip.service = services[trip.service_id]; 
                 trip.service.trips.Add(trip.trip_id, trip); 
+            });
+        }
+        public void Join(stop_times_trips stop_times_trips)
+        {
+            this.Values.ToList().ForEach(trip => {
+                trip.stop_times_sequence = stop_times_trips[trip.trip_id]; 
             });
         }
     }
