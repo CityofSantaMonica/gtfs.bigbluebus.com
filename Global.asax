@@ -1,13 +1,18 @@
 ﻿<%@ Application Language="C#" %>
 
 <%@ Import Namespace="System.Web.Routing" %>
+<%@ Import Namespace="System.Web.Http" %>
 
 <script runat="server">
 
     void Application_Start(object sender, EventArgs e) 
     {
         // Code that runs on application startup
-        RegisterRoutes(RouteTable.Routes);
+        RouteTable.Routes.MapPageRoute("TermsAndConditions","terms-and-conditions","~/terms.aspx");
+        GlobalConfiguration.Configuration.MapHttpAttributeRoutes();
+        //GlobalConfiguration.Configuration.Routes.MapHttpRoute("RouteTripsApi", "api/Routes/{id}/trips", new { controller = "Routes", action = "GetRouteTrips" });
+        GlobalConfiguration.Configuration.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = System.Web.Http.RouteParameter.Optional });
+        GlobalConfiguration.Configuration.EnsureInitialized();
     }
     
     void Application_End(object sender, EventArgs e) 
@@ -35,11 +40,6 @@
         // is set to InProc in the Web.config file. If session mode is set to StateServer 
         // or SQLServer, the event is not raised.
 
-    }
-
-    void RegisterRoutes(RouteCollection routes)
-    {
-        routes.MapPageRoute("TermsAndConditions","terms-and-conditions","~/terms.aspx");
     }
        
 </script>
