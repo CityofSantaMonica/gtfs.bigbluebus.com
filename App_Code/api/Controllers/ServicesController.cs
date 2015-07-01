@@ -12,6 +12,7 @@ namespace api.Controllers
 {
     public class ServicesController : ApiController
     {
+        [Route("api/services")]
         public IEnumerable<ViewModels.Service> GetAllServices()
         {
             return new gtfs(HttpContext.Current).services.Values.Select(service => new ViewModels.Service(service));
@@ -25,12 +26,25 @@ namespace api.Controllers
             else
                 return NotFound();
         }
-        [Route("api/services/{service_id}/routes/{route_id}/trips/stops")]
-        public IHttpActionResult GetService(String id)
+        [Route("api/services/{service_id}/routes")]
+        public IHttpActionResult GetServiceRoutes(String service_id)
         {
-            var services = new gtfs(HttpContext.Current).services;
-            if (services.ContainsKey(id))
-                return Ok(new ViewModels.ServiceRoute(services[id]));
+            var gtfs = new gtfs(HttpContext.Current);
+            var services = gtfs.services;
+            var routes = gtfs.routes;
+            if (services.ContainsKey(service_id))
+                return Ok(new ViewModels.ServiceRoutes(services[service_id]));
+            else
+                return NotFound();
+        }
+        [Route("api/services/{service_id}/routes/{route_id}/trips/stops")]
+        public IHttpActionResult GetServiceRouteTripsStops(String service_id, String route_id)
+        {
+            var gtfs = new gtfs(HttpContext.Current);
+            var services = gtfs.services;
+            var routes = gtfs.routes;
+            if (services.ContainsKey(service_id) && routes.ContainsKey(route_id))
+                return Ok(new ViewModels.ServiceRoute(services[service_id], routes[route_id]));
             else
                 return NotFound();
         }

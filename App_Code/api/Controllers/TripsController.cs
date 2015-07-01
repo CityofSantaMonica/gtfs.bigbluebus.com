@@ -12,6 +12,7 @@ namespace api.Controllers
 {
     public class TripsController : ApiController
     {
+        [Route("api/trips")]
         public IEnumerable<ViewModels.Trip> GetAllTrips()
         {
             return new gtfs(HttpContext.Current).trips.Values.Select(trip=> new ViewModels.Trip(trip));
