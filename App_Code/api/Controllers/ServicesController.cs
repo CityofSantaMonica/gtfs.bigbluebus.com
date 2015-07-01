@@ -78,5 +78,19 @@ namespace api.Controllers
 
             return services.Select(service => new ViewModels.ServiceStandardRoutes(service));
         }
+        [Route("api/services/standard/routes/directions")]
+        public IEnumerable<ViewModels.ServiceStandardRoutesDirections> GetServicesStandardRoutesDirections()
+        {
+            var services = StandardServices();
+
+            return services.Select(service => new ViewModels.ServiceStandardRoutesDirections(service));
+        }
+        [Route("api/services/standard/routes/directions/mapinfo")]
+        public IEnumerable<ViewModels.ServiceStandardRoutesDirectionsMapInfo> GetServicesStandardRoutesDirectionsMapInfo()
+        {
+            var services = StandardServices();
+
+            return services.Select(service => new ViewModels.ServiceStandardRoutesDirectionsMapInfo(service));
+        }
     }
 }

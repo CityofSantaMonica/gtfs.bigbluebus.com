@@ -33,6 +33,7 @@ namespace api.ViewModels
         public String stop_timezone { get; set; }
         [DataMember]
         public String wheelchair_boarding { get; set; }
+
         public Stop(api.Models.stop stop)
         {
             this.stop_id = stop.stop_id;

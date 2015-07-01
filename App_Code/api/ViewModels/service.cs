@@ -122,4 +122,30 @@ namespace api.ViewModels
             this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new Route(route));
         }
     }
+    [DataContract]
+    public class ServiceStandardRoutesDirections : ServiceStandard
+    {
+        [DataMember]
+        public IEnumerable<RouteDirections> routeDirections { get; set; }
+
+        public ServiceStandardRoutesDirections() { }
+        public ServiceStandardRoutesDirections(Models.service service)
+            : base(service)
+        {
+            this.routeDirections = service.trips.Values.GroupBy(trip => trip.route).Select(group => new RouteDirections(group.Key, service));
+        }
+    }
+    [DataContract]
+    public class ServiceStandardRoutesDirectionsMapInfo : ServiceStandard
+    {
+        [DataMember]
+        public IEnumerable<RouteDirectionsMapInfo> routeDirectionsMapInfo { get; set; }
+
+        public ServiceStandardRoutesDirectionsMapInfo() { }
+        public ServiceStandardRoutesDirectionsMapInfo(Models.service service)
+            : base(service)
+        {
+            this.routeDirectionsMapInfo = service.trips.Values.GroupBy(trip => trip.route).Select(group => new RouteDirectionsMapInfo(group.Key, service));
+        }
+    }
 }

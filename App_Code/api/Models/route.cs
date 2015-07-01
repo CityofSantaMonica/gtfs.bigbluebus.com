@@ -31,8 +31,10 @@ namespace api.Models
         public route()
         {
             trips = new trips();
+            directions = new directions();
         }
         public trips trips { get; set; }
+        public directions directions { get; set; }
     }
     public class routes : Dictionary<String, route>
     {

@@ -37,5 +37,23 @@ namespace api.Controllers
             else
                 return NotFound();
         }
+        [Route("api/routes/{route_id}/directions")]
+        public IHttpActionResult GetRouteDirections(String route_id)
+        {
+            var routes = new gtfs(HttpContext.Current).routes;
+            if (routes.ContainsKey(route_id))
+                return Ok(new ViewModels.RouteDirections(routes[route_id]));
+            else
+                return NotFound();
+        }
+        [Route("api/routes/{route_id}/directions/trips")]
+        public IHttpActionResult GetRouteDirectionsTrips(String route_id)
+        {
+            var routes = new gtfs(HttpContext.Current).routes;
+            if (routes.ContainsKey(route_id))
+                return Ok(new ViewModels.RouteDirectionsTrips(routes[route_id]));
+            else
+                return NotFound();
+        }
     }
 }
