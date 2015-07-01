@@ -46,10 +46,10 @@ namespace api.ViewModels
         public IEnumerable<Trip> trips { get; set; }
         public RouteTrips(api.Models.route route):base(route)
         {
-            this.trips = route.trips.Values.Select(trip => new ViewModels.Trip(trip));
+            this.trips = route.trips.Values.Select(trip => new Trip(trip));
         }
         public RouteTrips(api.Models.route route, api.Models.service service):base(route){
-            this.trips = route.trips.Values.Where(trip=>trip.service_id == service.service_id).Select(trip=> new ViewModels.Trip(trip));
+            this.trips = route.trips.Values.Where(trip=>trip.service_id == service.service_id).Select(trip=> new Trip(trip));
         }
     }
     [DataContract]
@@ -59,12 +59,12 @@ namespace api.ViewModels
         public IEnumerable<TripStop_Times> trips { get; set; }
         public RouteTripsStop_Times(api.Models.route route):base(route)
         {
-            this.trips = route.trips.Values.Select(trip => new ViewModels.TripStop_Times(trip));
+            this.trips = route.trips.Values.Select(trip => new TripStop_Times(trip));
         }
         public RouteTripsStop_Times(api.Models.route route, api.Models.service service)
             : base(route)
         {
-            this.trips = route.trips.Values.Where(trip => trip.service_id == service.service_id).Select(trip => new ViewModels.TripStop_Times(trip));
+            this.trips = route.trips.Values.Where(trip => trip.service_id == service.service_id).Select(trip => new TripStop_Times(trip));
         }
     }
 }

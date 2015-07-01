@@ -46,27 +46,29 @@ namespace api.ViewModels
         }
     }
     [DataContract]
-    public class ServiceRoute:Service
+    public class ServiceRoute : Service
     {
         [DataMember]
         public RouteTrips route { get; set; }
 
         public ServiceRoute() { }
-        public ServiceRoute(api.Models.service service, api.Models.route route):base(service)
+        public ServiceRoute(api.Models.service service, api.Models.route route)
+            : base(service)
         {
-            this.route = new ViewModels.RouteTrips(route);
+            this.route = new RouteTrips(route);
         }
     }
     [DataContract]
-    public class ServiceRoutes:Service
+    public class ServiceRoutes : Service
     {
         [DataMember]
         public IEnumerable<Route> routes { get; set; }
 
         public ServiceRoutes() { }
-        public ServiceRoutes(api.Models.service service):base(service)
+        public ServiceRoutes(api.Models.service service)
+            : base(service)
         {
-            this.routes = service.trips.Values.Select(trip=>trip.route).Distinct().Select(route => new ViewModels.Route(route));
+            this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new Route(route));
         }
     }
     [DataContract]
@@ -78,5 +80,46 @@ namespace api.ViewModels
         public DateTime end_date { get; set; }
 
         public ServiceDateRange() { }
+        public ServiceDateRange(Models.service service)
+        {
+            this.start_date = service.start_date;
+            this.end_date = service.end_date;
+        }
+    }
+    [DataContract]
+    public class ServiceStandard : ServiceDateRange
+    {
+        [DataMember]
+        public String service_id { get; set; }
+        [DataMember]
+        public String name { get; set; }
+
+        public ServiceStandard() { }
+        public ServiceStandard(Models.service service)
+            : base(service)
+        {
+            this.service_id = service.service_id;
+            if (service.monday && service.tuesday && service.wednesday && service.thursday && service.friday && !service.saturday && !service.sunday)
+                this.name = "Weekday";
+            if (!service.monday && !service.tuesday && !service.wednesday && !service.thursday && !service.friday && service.saturday && service.sunday)
+                this.name = "Weekend";
+            if (!service.monday && !service.tuesday && !service.wednesday && !service.thursday && !service.friday && service.saturday && !service.sunday)
+                this.name = "Saturday";
+            if (!service.monday && !service.tuesday && !service.wednesday && !service.thursday && !service.friday && !service.saturday && service.sunday)
+                this.name = "Sunday";
+        }
+    }
+    [DataContract]
+    public class ServiceStandardRoutes : ServiceStandard
+    {
+        [DataMember]
+        public IEnumerable<Route> routes { get; set; }
+
+        public ServiceStandardRoutes() { }
+        public ServiceStandardRoutes(Models.service service)
+            : base(service)
+        {
+            this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new Route(route));
+        }
     }
 }

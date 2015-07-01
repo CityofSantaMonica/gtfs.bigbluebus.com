@@ -17,30 +17,30 @@ namespace api.Controllers
         {
             return new gtfs(HttpContext.Current).trips.Values.Select(trip=> new ViewModels.Trip(trip));
         }
-        [Route("api/trips/{id}")]
-        public IHttpActionResult GetTrip(String id)
+        [Route("api/trips/{trip_id}")]
+        public IHttpActionResult GetTrip(String trip_id)
         {
             var trips = new gtfs(HttpContext.Current).trips;
-            if (trips.ContainsKey(id))
-                return Ok(new ViewModels.Trip(trips[id]));
+            if (trips.ContainsKey(trip_id))
+                return Ok(new ViewModels.Trip(trips[trip_id]));
             else
                 return NotFound();
         }
-        [Route("api/trips/{id}/stop_times")]
-        public IHttpActionResult GetTripStop_Times(String id)
+        [Route("api/trips/{trip_id}/stop_times")]
+        public IHttpActionResult GetTripStop_Times(String trip_id)
         {
             var trips = new gtfs(HttpContext.Current).trips;
-            if (trips.ContainsKey(id))
-                return Ok(new ViewModels.TripStop_Times(trips[id]));
+            if (trips.ContainsKey(trip_id))
+                return Ok(new ViewModels.TripStop_Times(trips[trip_id]));
             else
                 return NotFound();
         }
-        [Route("api/trips/{id}/stop_times/stop")]
-        public IHttpActionResult GetTripStop_TimesStop(String id)
+        [Route("api/trips/{trip_id}/stop_times/stop")]
+        public IHttpActionResult GetTripStop_TimesStop(String trip_id)
         {
             var trips = new gtfs(HttpContext.Current).trips;
-            if (trips.ContainsKey(id))
-                return Ok(new ViewModels.TripStop_TimesStop(trips[id]));
+            if (trips.ContainsKey(trip_id))
+                return Ok(new ViewModels.TripStop_TimesStop(trips[trip_id]));
             else
                 return NotFound();
         }
