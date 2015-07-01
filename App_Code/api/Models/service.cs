@@ -4,11 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace GTFSJSON
+namespace api.Models
 {
-    /// <summary>
-    /// Summary description for service
-    /// </summary>
     [DataContract]
     public class service
     {

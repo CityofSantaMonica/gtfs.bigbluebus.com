@@ -4,10 +4,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace GTFSJSON
+namespace api.ViewModels
 {
     [DataContract]
-    public class stop
+    public class Stop
     {
         [DataMember]
         public String stop_id { get; set; }
@@ -17,11 +17,9 @@ namespace GTFSJSON
         public String stop_name { get; set; }
         [DataMember]
         public String stop_desc { get; set; }
-        [DataMember(Name = "stop_lat")]
-        public String stop_lat_string { get; set; }
+        [DataMember]
         public Decimal stop_lat { get; set; }
-        [DataMember(Name = "stop_lon")]
-        public String stop_lon_string { get; set; }
+        [DataMember]
         public Decimal stop_lon { get; set; }
         [DataMember]
         public String zone_id { get; set; }
@@ -35,22 +33,21 @@ namespace GTFSJSON
         public String stop_timezone { get; set; }
         [DataMember]
         public String wheelchair_boarding { get; set; }
-        [OnDeserialized]
-        internal void OnDeserializedMethod(StreamingContext context)
+        public Stop(api.Models.stop stop)
         {
-            var test = new Decimal();
-            if (Decimal.TryParse(this.stop_lat_string, out test))
-                this.stop_lat = test;
-            if (Decimal.TryParse(this.stop_lon_string, out test))
-                this.stop_lon = test;
-        }
-
-        public stop()
-        {
+            this.stop_id = stop.stop_id;
+            this.stop_code = stop.stop_code;
+            this.stop_name = stop.stop_name;
+            this.stop_desc = stop.stop_desc;
+            this.stop_lat = stop.stop_lat;
+            this.stop_lon = stop.stop_lon;
+            this.zone_id = stop.zone_id;
+            this.stop_url = stop.stop_url;
+            this.location_type = stop.location_type;
+            this.parent_station = stop.parent_station;
+            this.stop_timezone = stop.stop_timezone;
+            this.wheelchair_boarding = stop.wheelchair_boarding;
         }
     }
-    public class stops : Dictionary<String, stop>
-    {
 
-    }
 }

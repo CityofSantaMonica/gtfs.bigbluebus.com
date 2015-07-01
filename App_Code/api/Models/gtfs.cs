@@ -7,7 +7,7 @@ using System.Web.Caching;
 
 using Newtonsoft.Json;
 
-namespace GTFSJSON
+namespace api.Models
 {
     public class gtfs
     {
@@ -15,24 +15,24 @@ namespace GTFSJSON
         public gtfs(HttpContext context)
         {
             var serializer = new Newtonsoft.Json.JsonSerializer();
-            routes = context.Cache["GTFSJSON.routes"] as GTFSJSON.routes;
-            services = context.Cache["GTFSJSON.services"] as GTFSJSON.services;
-            stops = context.Cache["GTFSJSON.stops"] as GTFSJSON.stops;
-            stop_times_trips = context.Cache["GTFSJSON.stop_times_trips"] as GTFSJSON.stop_times_trips;
-            trips = context.Cache["GTFSJSON.trips"] as GTFSJSON.trips;
+            routes = context.Cache["GTFSJSON.routes"] as api.Models.routes;
+            services = context.Cache["GTFSJSON.services"] as api.Models.services;
+            stops = context.Cache["GTFSJSON.stops"] as api.Models.stops;
+            stop_times_trips = context.Cache["GTFSJSON.stop_times_trips"] as api.Models.stop_times_trips;
+            trips = context.Cache["GTFSJSON.trips"] as api.Models.trips;
 
             if (routes == null || services == null || stops == null || stop_times_trips == null || trips == null)
             {
-                var routes_path = context.Server.MapPath("parsed/routes.json");
-                var services_path = context.Server.MapPath("parsed/calendar.json");
-                var stops_path = context.Server.MapPath("parsed/stops.json");
-                var stop_times_trips_path = context.Server.MapPath("parsed/stop_times.json");
-                var trips_path = context.Server.MapPath("parsed/trips.json");
-                routes = serializer.Deserialize<GTFSJSON.routes>(new JsonTextReader(new StreamReader(routes_path)));
-                services = serializer.Deserialize<GTFSJSON.services>(new JsonTextReader(new StreamReader(services_path)));
-                stops = serializer.Deserialize<GTFSJSON.stops>(new JsonTextReader(new StreamReader(stops_path)));
-                stop_times_trips = serializer.Deserialize<GTFSJSON.stop_times_trips>(new JsonTextReader(new StreamReader(stop_times_trips_path)));
-                trips = serializer.Deserialize<GTFSJSON.trips>(new JsonTextReader(new StreamReader(trips_path)));
+                var routes_path = context.Server.MapPath("/parsed/routes.json");
+                var services_path = context.Server.MapPath("/parsed/calendar.json");
+                var stops_path = context.Server.MapPath("/parsed/stops.json");
+                var stop_times_trips_path = context.Server.MapPath("/parsed/stop_times.json");
+                var trips_path = context.Server.MapPath("/parsed/trips.json");
+                routes = serializer.Deserialize<api.Models.routes>(new JsonTextReader(new StreamReader(routes_path)));
+                services = serializer.Deserialize<api.Models.services>(new JsonTextReader(new StreamReader(services_path)));
+                stops = serializer.Deserialize<api.Models.stops>(new JsonTextReader(new StreamReader(stops_path)));
+                stop_times_trips = serializer.Deserialize<api.Models.stop_times_trips>(new JsonTextReader(new StreamReader(stop_times_trips_path)));
+                trips = serializer.Deserialize<api.Models.trips>(new JsonTextReader(new StreamReader(trips_path)));
 
                 stop_times_trips.Join(stops);
                 trips.Join(routes);
