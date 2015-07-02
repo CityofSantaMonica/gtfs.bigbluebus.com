@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="shape")]
     public class Shape
     {
         [DataMember]

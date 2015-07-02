@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="trip")]
     public class Trip
     {
         [DataMember]
@@ -43,7 +43,7 @@ namespace api.ViewModels
             this.bikes_allowed = trip.bikes_allowed;
         }
     }
-    [DataContract]
+    [DataContract(Name="trip")]
     public class TripStop_Times:Trip
     {
         [DataMember]
@@ -54,7 +54,7 @@ namespace api.ViewModels
             this.stop_times = trip.stop_times_sequence.Values.Select(stop_time => new Stop_Time(stop_time));
         }
     }
-    [DataContract]
+    [DataContract(Name="trip")]
     public class TripStop_TimesStop:Trip
     {
         [DataMember]

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="stop_time")]
     public class Stop_Time
     {
         [DataMember]
@@ -34,6 +34,7 @@ namespace api.ViewModels
             this.trip_id = stop_time.trip_id;
             this.arrival_time = stop_time.arrival_time;
             this.departure_time = stop_time.departure_time;
+            this.stop_id = stop_time.stop_id;
             this.stop_sequence = stop_time.stop_sequence;
             this.stop_headsign = stop_time.stop_headsign;
             this.pickup_type = stop_time.pickup_type;
@@ -42,7 +43,7 @@ namespace api.ViewModels
             this.timepoint = stop_time.timepoint;
         }
     }
-    [DataContract]
+    [DataContract(Name="stop_time")]
     public class Stop_TimeStop:Stop_Time
     {
         [DataMember]

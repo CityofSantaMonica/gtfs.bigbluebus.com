@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="map_info")]
     public class MapInfo
     {
         [DataMember]

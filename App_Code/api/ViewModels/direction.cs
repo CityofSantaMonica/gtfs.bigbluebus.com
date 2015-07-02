@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="direction")]
     public class Direction
     {
         [DataMember]
@@ -17,26 +17,26 @@ namespace api.ViewModels
             direction_id = direction.direction_id;
         }
     }
-    [DataContract]
+    [DataContract(Name="direction")]
     public class DirectionMapInfo
     {
         [DataMember]
         public String direction_id { get; set; }
         [DataMember]
-        public MapInfo mapinfo { get; set; }
+        public MapInfo map_info { get; set; }
         public DirectionMapInfo() { }
         public DirectionMapInfo(Models.direction direction)
         {
             direction_id = direction.direction_id;
-            mapinfo = new MapInfo(direction);
+            map_info = new MapInfo(direction);
         }
         public DirectionMapInfo(Models.direction direction, Models.service service)
         {
             direction_id = direction.direction_id;
-            mapinfo = new MapInfo(direction, service);
+            map_info = new MapInfo(direction, service);
         }
     }
-    [DataContract]
+    [DataContract(Name="direction")]
     public class DirectionTrips : Direction
     {
         [DataMember]

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="service")]
     public class Service
     {
         [DataMember]
@@ -45,7 +45,7 @@ namespace api.ViewModels
             this.end_date = service.end_date;
         }
     }
-    [DataContract]
+    [DataContract(Name="service")]
     public class ServiceRoute : Service
     {
         [DataMember]
@@ -58,7 +58,7 @@ namespace api.ViewModels
             this.route = new RouteTrips(route);
         }
     }
-    [DataContract]
+    [DataContract(Name="service")]
     public class ServiceRoutes : Service
     {
         [DataMember]
@@ -71,7 +71,7 @@ namespace api.ViewModels
             this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new Route(route));
         }
     }
-    [DataContract]
+    [DataContract(Name="service")]
     public class ServiceDateRange
     {
         [DataMember]
@@ -86,7 +86,7 @@ namespace api.ViewModels
             this.end_date = service.end_date;
         }
     }
-    [DataContract]
+    [DataContract(Name="service")]
     public class ServiceStandard : ServiceDateRange
     {
         [DataMember]
@@ -109,7 +109,7 @@ namespace api.ViewModels
                 this.name = "Sunday";
         }
     }
-    [DataContract]
+    [DataContract(Name="service")]
     public class ServiceStandardRoutes : ServiceStandard
     {
         [DataMember]
@@ -122,7 +122,7 @@ namespace api.ViewModels
             this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new Route(route));
         }
     }
-    [DataContract]
+    [DataContract(Name="service")]
     public class ServiceStandardRoutesDirections : ServiceStandard
     {
         [DataMember]
@@ -134,28 +134,28 @@ namespace api.ViewModels
         {
             this.routeDirections = service.trips.Values.GroupBy(trip => trip.route).Select(group => new RouteDirections(group.Key, service));
         }
-        public ServiceStandardRoutesDirections(Models.service service, String route_id)
+        public ServiceStandardRoutesDirections(Models.service service, Models.route route)
             : base(service)
         {
-            this.routeDirections = service.trips.Values.Where(trip=>trip.route_id==route_id).GroupBy(trip => trip.route).Select(group => new RouteDirections(group.Key, service));
+            this.routeDirections = service.trips.Values.Where(trip => trip.route == route).GroupBy(trip => trip.route).Select(group => new RouteDirections(group.Key, service));
         }
     }
-    [DataContract]
+    [DataContract(Name="service")]
     public class ServiceStandardRoutesDirectionsMapInfo : ServiceStandard
     {
         [DataMember]
-        public IEnumerable<RouteDirectionsMapInfo> routeDirectionsMapInfo { get; set; }
+        public IEnumerable<RouteDirectionsMapInfo> routes { get; set; }
 
         public ServiceStandardRoutesDirectionsMapInfo() { }
         public ServiceStandardRoutesDirectionsMapInfo(Models.service service)
             : base(service)
         {
-            this.routeDirectionsMapInfo = service.trips.Values.GroupBy(trip => trip.route).Select(group => new RouteDirectionsMapInfo(group.Key, service));
+            this.routes = service.trips.Values.GroupBy(trip => trip.route).Select(group => new RouteDirectionsMapInfo(group.Key, service));
         }
-        public ServiceStandardRoutesDirectionsMapInfo(Models.service service, String route_id)
+        public ServiceStandardRoutesDirectionsMapInfo(Models.service service, Models.route route)
             : base(service)
         {
-            this.routeDirectionsMapInfo = service.trips.Values.Where(trip=>trip.route_id==route_id).GroupBy(trip => trip.route).Select(group => new RouteDirectionsMapInfo(group.Key, service));
+            this.routes = service.trips.Values.Where(trip => trip.route == route).GroupBy(trip => trip.route).Select(group => new RouteDirectionsMapInfo(group.Key, service));
         }
     }
 }

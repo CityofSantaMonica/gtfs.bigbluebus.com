@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="stop")]
     public class Stop
     {
         [DataMember]
@@ -50,21 +50,21 @@ namespace api.ViewModels
             this.wheelchair_boarding = stop.wheelchair_boarding;
         }
     }
-    [DataContract]
+    [DataContract(Name="stop")]
     public class StopTimes : Stop
     {
         [DataMember]
-        public IEnumerable<DateTime> times { get; set; }
+        public IEnumerable<Stop_Time> stop_times { get; set; }
 
         public StopTimes(Models.stop stop, Models.direction direction)
             : base(stop)
         {
-            this.times = direction.trips.Values.SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue).Select(stop_time => stop_time.arrival_time.Value)).OrderBy(arrival_time => arrival_time);
+            this.stop_times = direction.trips.Values.SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue).Select(stop_time => new Stop_Time(stop_time))).OrderBy(stop_time => stop_time.arrival_time);
         }
         public StopTimes(Models.stop stop, Models.direction direction, Models.service service)
             : base(stop)
         {
-            this.times = direction.trips.Values.Where(trip=>trip.service==service).SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue).Select(stop_time => stop_time.arrival_time.Value)).OrderBy(arrival_time => arrival_time).Distinct();
+            this.stop_times = direction.trips.Values.Where(trip=>trip.service==service).SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue).Select(stop_time => new Stop_Time(stop_time))).OrderBy(stop_time => stop_time.arrival_time);
         }
     }
 }

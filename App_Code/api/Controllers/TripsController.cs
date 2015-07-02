@@ -13,9 +13,9 @@ namespace api.Controllers
     public class TripsController : ApiController
     {
         [Route("api/trips")]
-        public IEnumerable<ViewModels.Trip> GetAllTrips()
+        public Dictionary<String, ViewModels.Trip> GetAllTrips()
         {
-            return new gtfs(HttpContext.Current).trips.Values.Select(trip=> new ViewModels.Trip(trip));
+            return new gtfs(HttpContext.Current).trips.Values.Select(trip=>new ViewModels.Trip(trip)).ToDictionary(trip=>trip.trip_id);
         }
         [Route("api/trips/{trip_id}")]
         public IHttpActionResult GetTrip(String trip_id)

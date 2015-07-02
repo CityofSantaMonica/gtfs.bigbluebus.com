@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract]
+    [DataContract(Name="route")]
     public class Route
     {
         [DataMember]
@@ -40,7 +40,7 @@ namespace api.ViewModels
             this.route_url = route.route_url;
         }
     }
-    [DataContract]
+    [DataContract(Name="route")]
     public class RouteTrips : Route
     {
         [DataMember]
@@ -56,7 +56,7 @@ namespace api.ViewModels
             this.trips = route.trips.Values.Where(trip => trip.service_id == service.service_id).Select(trip => new Trip(trip));
         }
     }
-    [DataContract]
+    [DataContract(Name="route")]
     public class RouteDirections : Route
     {
         [DataMember]
@@ -72,23 +72,23 @@ namespace api.ViewModels
             this.directions = route.directions.Values.GroupJoin(service.trips.Values, outer => outer, inner => inner.direction, (outer, inner) => new Direction(outer));
         }
     }
-    [DataContract]
+    [DataContract(Name="route")]
     public class RouteDirectionsMapInfo : Route
     {
         [DataMember]
-        public IEnumerable<DirectionMapInfo> directionMapInfo { get; set; }
+        public IEnumerable<DirectionMapInfo> directions { get; set; }
         public RouteDirectionsMapInfo(Models.route route)
             : base(route)
         {
-            this.directionMapInfo = route.directions.Values.Select(direction => new DirectionMapInfo(direction));
+            this.directions = route.directions.Values.Select(direction => new DirectionMapInfo(direction));
         }
         public RouteDirectionsMapInfo(Models.route route, Models.service service)
             : base(route)
         {
-            this.directionMapInfo = route.directions.Values.Select(direction => new DirectionMapInfo(direction, service));
+            this.directions = route.directions.Values.Select(direction => new DirectionMapInfo(direction, service));
         }
     }
-    [DataContract]
+    [DataContract(Name="route")]
     public class RouteDirectionsTrips : Route
     {
         [DataMember]
@@ -104,7 +104,7 @@ namespace api.ViewModels
             this.directions = route.directions.Values.Select(direction => new DirectionTrips(direction, service));
         }
     }
-    [DataContract]
+    [DataContract(Name="route")]
     public class RouteTripsStop_Times : Route
     {
         [DataMember]

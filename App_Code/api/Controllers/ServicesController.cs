@@ -12,14 +12,14 @@ namespace api.Controllers
 {
     public class ServicesController : ApiController
     {
-        private IEnumerable<Models.service> StandardServices()
+        private IEnumerable<Models.service> StandardServices(Models.gtfs gtfs)
         {
-            return new gtfs(HttpContext.Current).services.Values.Where(service => (service.monday && service.tuesday && service.wednesday && service.thursday && service.friday) || service.saturday || service.sunday);
+            return gtfs.services.Values.Where(service => (service.monday && service.tuesday && service.wednesday && service.thursday && service.friday) || service.saturday || service.sunday);
         }
         [Route("api/services")]
-        public IEnumerable<ViewModels.Service> GetAllServices()
+        public Dictionary<String, ViewModels.Service> GetAllServices()
         {
-            return new gtfs(HttpContext.Current).services.Values.Select(service => new ViewModels.Service(service));
+            return new gtfs(HttpContext.Current).services.Values.Select(service => new ViewModels.Service(service)).ToDictionary(service=>service.service_id);
         }
         [Route("api/services/{id}")]
         public IHttpActionResult GetService(String id)
@@ -59,52 +59,70 @@ namespace api.Controllers
             return services.Values.Select(service => new Tuple<DateTime, DateTime>(service.start_date, service.end_date)).Distinct().Select(tuple => new ViewModels.ServiceDateRange { start_date = tuple.Item1, end_date = tuple.Item2 });
         }
         [Route("api/services/{start_date:datetime}/{end_date:datetime}/standard")]
-        public IEnumerable<ViewModels.Service> GetServicesDateRangeStandard(DateTime start_date, DateTime end_date)
+        public IHttpActionResult GetServicesDateRangeStandard(DateTime start_date, DateTime end_date)
         {
-            var services = StandardServices().Where(service => service.start_date.Equals(start_date) && service.end_date.Equals(end_date));
-            return services.Select(service => new ViewModels.Service(service));
+            var gtfs = new Models.gtfs(HttpContext.Current);
+            var services = StandardServices(gtfs).Where(service => service.start_date.Equals(start_date) && service.end_date.Equals(end_date));
+            if (services.Count() > 0)
+                return Ok(services.Select(service => new ViewModels.Service(service)));
+            else
+                return NotFound();
         }
         [Route("api/services/standard")]
         public IEnumerable<ViewModels.ServiceStandard> GetServicesStandard()
         {
-            var services = StandardServices();
+            var gtfs = new Models.gtfs(HttpContext.Current);
+            var services = StandardServices(gtfs);
 
             return services.Select(service => new ViewModels.ServiceStandard(service));
         }
         [Route("api/services/standard/routes")]
         public IEnumerable<ViewModels.ServiceStandardRoutes> GetServicesStandardRoutes()
         {
-            var services = StandardServices();
+            var gtfs = new Models.gtfs(HttpContext.Current);
+            var services = StandardServices(gtfs);
 
             return services.Select(service => new ViewModels.ServiceStandardRoutes(service));
         }
         [Route("api/services/standard/routes/directions")]
         public IEnumerable<ViewModels.ServiceStandardRoutesDirections> GetServicesStandardRoutesDirections()
         {
-            var services = StandardServices();
+            var gtfs = new Models.gtfs(HttpContext.Current);
+            var services = StandardServices(gtfs);
 
             return services.Select(service => new ViewModels.ServiceStandardRoutesDirections(service));
         }
         [Route("api/services/standard/routes/directions/mapinfo")]
         public IEnumerable<ViewModels.ServiceStandardRoutesDirectionsMapInfo> GetServicesStandardRoutesDirectionsMapInfo()
         {
-            var services = StandardServices();
+            var gtfs = new Models.gtfs(HttpContext.Current);
+            var services = StandardServices(gtfs);
 
             return services.Select(service => new ViewModels.ServiceStandardRoutesDirectionsMapInfo(service));
         }
         [Route("api/services/standard/routes/{route_id}/directions")]
-        public IEnumerable<ViewModels.ServiceStandardRoutesDirections> GetServicesStandardRoutesDirections(String route_id)
+        public IHttpActionResult GetServicesStandardRoutesDirections(String route_id)
         {
-            var services = StandardServices();
+            var gtfs = new Models.gtfs(HttpContext.Current);
+            var routes = gtfs.routes;
+            var services = StandardServices(gtfs);
 
-            return services.Select(service => new ViewModels.ServiceStandardRoutesDirections(service, route_id));
+            if (routes.ContainsKey(route_id))
+                return Ok(services.Select(service => new ViewModels.ServiceStandardRoutesDirections(service, routes[route_id])));
+            else
+                return NotFound();
         }
         [Route("api/services/standard/routes/{route_id}/directions/mapinfo")]
-        public IEnumerable<ViewModels.ServiceStandardRoutesDirectionsMapInfo> GetServicesStandardRoutesDirectionsMapInfo(String route_id)
+        public IHttpActionResult GetServicesStandardRoutesDirectionsMapInfo(String route_id)
         {
-            var services = StandardServices();
+            var gtfs = new Models.gtfs(HttpContext.Current);
+            var routes = gtfs.routes;
+            var services = StandardServices(gtfs);
 
-            return services.Select(service => new ViewModels.ServiceStandardRoutesDirectionsMapInfo(service, route_id));
+            if (routes.ContainsKey(route_id))
+                return Ok(services.Select(service => new ViewModels.ServiceStandardRoutesDirectionsMapInfo(service, routes[route_id])));
+            else
+                return NotFound();
         }
     }
 }
