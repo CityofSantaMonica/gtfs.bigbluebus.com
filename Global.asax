@@ -10,8 +10,6 @@
         // Code that runs on application startup
         RouteTable.Routes.MapPageRoute("TermsAndConditions","terms-and-conditions","~/terms.aspx");
         GlobalConfiguration.Configuration.MapHttpAttributeRoutes();
-        //GlobalConfiguration.Configuration.Routes.MapHttpRoute("RouteTripsApi", "api/Routes/{id}/trips", new { controller = "Routes", action = "GetRouteTrips" });
-        //GlobalConfiguration.Configuration.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = System.Web.Http.RouteParameter.Optional });
         GlobalConfiguration.Configuration.EnsureInitialized();
     }
     
