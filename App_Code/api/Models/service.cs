@@ -56,8 +56,10 @@ namespace api.Models
         }
         public service()
         {
+            calendar_dates = new calendar_dates();
             trips = new trips();
         }
+        public calendar_dates calendar_dates { get; set; }
         public trips trips { get; set; }
     }
     public class services : Dictionary<String, service>

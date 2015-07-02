@@ -53,7 +53,7 @@ namespace api.ViewModels
         public RouteTrips(Models.route route, Models.service service)
             : base(route)
         {
-            this.trips = route.trips.Values.Where(trip => trip.service_id == service.service_id).Select(trip => new Trip(trip));
+            this.trips = route.trips.Values.Where(trip => trip.service == service).Select(trip => new Trip(trip));
         }
     }
     [DataContract(Name="route")]

@@ -7,22 +7,22 @@ using System.Web;
 namespace api.ViewModels
 {
     [DataContract(Name="map_info")]
-    public class MapInfo
+    public class Map_Info
     {
         [DataMember]
         public IEnumerable<Shape> shapes { get; set; }
         [DataMember]
-        public IEnumerable<StopTimes> stops { get; set; }
-        public MapInfo() { }
-        public MapInfo(Models.direction direction) 
+        public IEnumerable<StopStop_Times> stops { get; set; }
+        public Map_Info() { }
+        public Map_Info(Models.direction direction) 
         {
             this.shapes = direction.trips.Values.Select(trip => trip.shape_id).Distinct().Select(shape_id => new Shape { shape_id = shape_id });
-            this.stops = direction.trips.Values.SelectMany(trip => trip.stops.Values).Distinct().Select(stop=> new StopTimes(stop, direction));
+            this.stops = direction.trips.Values.SelectMany(trip => trip.stops.Values).Distinct().Select(stop=> new StopStop_Times(stop, direction));
         }
-        public MapInfo(Models.direction direction, Models.service service) 
+        public Map_Info(Models.direction direction, Models.service service) 
         {
             this.shapes = direction.trips.Values.Select(trip => trip.shape_id).Distinct().Select(shape_id => new Shape { shape_id = shape_id });
-            this.stops = direction.trips.Values.Where(trip=>trip.service == service).SelectMany(trip => trip.stops.Values).Distinct().Select(stop=> new StopTimes(stop, direction, service));
+            this.stops = direction.trips.Values.Where(trip=>trip.service == service).SelectMany(trip => trip.stops.Values).Distinct().Select(stop=> new StopStop_Times(stop, direction, service));
         }
     }
 }

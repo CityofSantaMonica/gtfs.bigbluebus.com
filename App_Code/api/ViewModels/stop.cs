@@ -34,7 +34,7 @@ namespace api.ViewModels
         [DataMember]
         public String wheelchair_boarding { get; set; }
 
-        public Stop(api.Models.stop stop)
+        public Stop(Models.stop stop)
         {
             this.stop_id = stop.stop_id;
             this.stop_code = stop.stop_code;
@@ -51,17 +51,17 @@ namespace api.ViewModels
         }
     }
     [DataContract(Name="stop")]
-    public class StopTimes : Stop
+    public class StopStop_Times : Stop
     {
         [DataMember]
         public IEnumerable<Stop_Time> stop_times { get; set; }
 
-        public StopTimes(Models.stop stop, Models.direction direction)
+        public StopStop_Times(Models.stop stop, Models.direction direction)
             : base(stop)
         {
             this.stop_times = direction.trips.Values.SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue).Select(stop_time => new Stop_Time(stop_time))).OrderBy(stop_time => stop_time.arrival_time);
         }
-        public StopTimes(Models.stop stop, Models.direction direction, Models.service service)
+        public StopStop_Times(Models.stop stop, Models.direction direction, Models.service service)
             : base(stop)
         {
             this.stop_times = direction.trips.Values.Where(trip=>trip.service==service).SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue).Select(stop_time => new Stop_Time(stop_time))).OrderBy(stop_time => stop_time.arrival_time);

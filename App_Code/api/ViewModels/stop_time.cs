@@ -29,7 +29,7 @@ namespace api.ViewModels
         public Decimal shape_dist_traveled { get; set; }
         [DataMember]
         public String timepoint { get; set; }
-        public Stop_Time(api.Models.stop_time stop_time)
+        public Stop_Time(Models.stop_time stop_time)
         {
             this.trip_id = stop_time.trip_id;
             this.arrival_time = stop_time.arrival_time;
@@ -48,7 +48,7 @@ namespace api.ViewModels
     {
         [DataMember]
         public Stop Stop { get; set; }
-        public Stop_TimeStop(api.Models.stop_time stop_time):base(stop_time)
+        public Stop_TimeStop(Models.stop_time stop_time):base(stop_time)
         {
             this.Stop = new Stop(stop_time.stop);
         }

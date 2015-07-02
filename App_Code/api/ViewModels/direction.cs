@@ -23,17 +23,17 @@ namespace api.ViewModels
         [DataMember]
         public String direction_id { get; set; }
         [DataMember]
-        public MapInfo map_info { get; set; }
+        public Map_Info map_info { get; set; }
         public DirectionMapInfo() { }
         public DirectionMapInfo(Models.direction direction)
         {
             direction_id = direction.direction_id;
-            map_info = new MapInfo(direction);
+            map_info = new Map_Info(direction);
         }
         public DirectionMapInfo(Models.direction direction, Models.service service)
         {
             direction_id = direction.direction_id;
-            map_info = new MapInfo(direction, service);
+            map_info = new Map_Info(direction, service);
         }
     }
     [DataContract(Name="direction")]

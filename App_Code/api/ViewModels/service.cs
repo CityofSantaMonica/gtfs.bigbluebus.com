@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.ViewModels
 {
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
     public class Service
     {
         [DataMember]
@@ -31,7 +31,7 @@ namespace api.ViewModels
         public DateTime end_date { get; set; }
 
         public Service() { }
-        public Service(api.Models.service service)
+        public Service(Models.service service)
         {
             this.service_id = service.service_id;
             this.monday = service.monday;
@@ -45,33 +45,59 @@ namespace api.ViewModels
             this.end_date = service.end_date;
         }
     }
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
+    public class ServiceCalendar_Dates : Service
+    {
+        [DataMember]
+        public IEnumerable<Calendar_Date> calendar_dates { get; set; }
+
+        public ServiceCalendar_Dates() { }
+        public ServiceCalendar_Dates(Models.service service)
+            : base(service)
+        {
+            this.calendar_dates = service.calendar_dates.Select(calendar_date => new Calendar_Date(calendar_date));
+        }
+    }
+    [DataContract(Name = "service")]
     public class ServiceRoute : Service
     {
         [DataMember]
         public RouteTrips route { get; set; }
 
         public ServiceRoute() { }
-        public ServiceRoute(api.Models.service service, api.Models.route route)
+        public ServiceRoute(Models.service service, Models.route route)
             : base(service)
         {
             this.route = new RouteTrips(route);
         }
     }
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
     public class ServiceRoutes : Service
     {
         [DataMember]
         public IEnumerable<Route> routes { get; set; }
 
         public ServiceRoutes() { }
-        public ServiceRoutes(api.Models.service service)
+        public ServiceRoutes(Models.service service)
             : base(service)
         {
             this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new Route(route));
         }
     }
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
+    public class ServiceRoutesTrips : Service
+    {
+        [DataMember]
+        public IEnumerable<RouteTrips> routes { get; set; }
+
+        public ServiceRoutesTrips() { }
+        public ServiceRoutesTrips(Models.service service)
+            : base(service)
+        {
+            this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new RouteTrips(route, service));
+        }
+    }
+    [DataContract(Name = "service")]
     public class ServiceDateRange
     {
         [DataMember]
@@ -86,7 +112,7 @@ namespace api.ViewModels
             this.end_date = service.end_date;
         }
     }
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
     public class ServiceStandard : ServiceDateRange
     {
         [DataMember]
@@ -109,7 +135,7 @@ namespace api.ViewModels
                 this.name = "Sunday";
         }
     }
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
     public class ServiceStandardRoutes : ServiceStandard
     {
         [DataMember]
@@ -122,7 +148,7 @@ namespace api.ViewModels
             this.routes = service.trips.Values.Select(trip => trip.route).Distinct().Select(route => new Route(route));
         }
     }
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
     public class ServiceStandardRoutesDirections : ServiceStandard
     {
         [DataMember]
@@ -140,7 +166,7 @@ namespace api.ViewModels
             this.routeDirections = service.trips.Values.Where(trip => trip.route == route).GroupBy(trip => trip.route).Select(group => new RouteDirections(group.Key, service));
         }
     }
-    [DataContract(Name="service")]
+    [DataContract(Name = "service")]
     public class ServiceStandardRoutesDirectionsMapInfo : ServiceStandard
     {
         [DataMember]

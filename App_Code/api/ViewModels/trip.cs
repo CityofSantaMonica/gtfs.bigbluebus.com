@@ -29,7 +29,7 @@ namespace api.ViewModels
         public String wheelchair_accessible { get; set; }
         [DataMember]
         public String bikes_allowed { get; set; }
-        public Trip(api.Models.trip trip)
+        public Trip(Models.trip trip)
         {
             this.route_id = trip.route_id;
             this.service_id = trip.service_id;
@@ -49,7 +49,7 @@ namespace api.ViewModels
         [DataMember]
         public IEnumerable<Stop_Time> stop_times { get; set; }
 
-        public TripStop_Times(api.Models.trip trip):base(trip)
+        public TripStop_Times(Models.trip trip):base(trip)
         {
             this.stop_times = trip.stop_times_sequence.Values.Select(stop_time => new Stop_Time(stop_time));
         }
@@ -60,7 +60,7 @@ namespace api.ViewModels
         [DataMember]
         public IEnumerable<Stop_TimeStop> stop_times { get; set; }
 
-        public TripStop_TimesStop(api.Models.trip trip):base(trip)
+        public TripStop_TimesStop(Models.trip trip):base(trip)
         {
             this.stop_times = trip.stop_times_sequence.Values.Select(stop_time => new Stop_TimeStop(stop_time));
         }
