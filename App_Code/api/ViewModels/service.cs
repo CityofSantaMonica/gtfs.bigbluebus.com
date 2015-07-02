@@ -134,6 +134,11 @@ namespace api.ViewModels
         {
             this.routeDirections = service.trips.Values.GroupBy(trip => trip.route).Select(group => new RouteDirections(group.Key, service));
         }
+        public ServiceStandardRoutesDirections(Models.service service, String route_id)
+            : base(service)
+        {
+            this.routeDirections = service.trips.Values.Where(trip=>trip.route_id==route_id).GroupBy(trip => trip.route).Select(group => new RouteDirections(group.Key, service));
+        }
     }
     [DataContract]
     public class ServiceStandardRoutesDirectionsMapInfo : ServiceStandard
@@ -146,6 +151,11 @@ namespace api.ViewModels
             : base(service)
         {
             this.routeDirectionsMapInfo = service.trips.Values.GroupBy(trip => trip.route).Select(group => new RouteDirectionsMapInfo(group.Key, service));
+        }
+        public ServiceStandardRoutesDirectionsMapInfo(Models.service service, String route_id)
+            : base(service)
+        {
+            this.routeDirectionsMapInfo = service.trips.Values.Where(trip=>trip.route_id==route_id).GroupBy(trip => trip.route).Select(group => new RouteDirectionsMapInfo(group.Key, service));
         }
     }
 }

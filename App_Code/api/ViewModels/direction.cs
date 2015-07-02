@@ -30,6 +30,11 @@ namespace api.ViewModels
             direction_id = direction.direction_id;
             mapinfo = new MapInfo(direction);
         }
+        public DirectionMapInfo(Models.direction direction, Models.service service)
+        {
+            direction_id = direction.direction_id;
+            mapinfo = new MapInfo(direction, service);
+        }
     }
     [DataContract]
     public class DirectionTrips : Direction
