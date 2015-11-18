@@ -94,14 +94,44 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\jobs\continuous\extractgtfs\run.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\shapefile.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\agency.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\fareattribute.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\farerule.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\feedinfo.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\frequency.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\gtfsfactory.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\gtfsfactoryuser.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\gtfsobjectbase.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\loader.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\problems.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\route.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\schedule.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\serviceperiod.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\shape.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\shapelib.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\shapeloader.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\shapepoint.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\stop.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\stoptime.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\transfer.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\trip.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\util.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\version.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\__init__.py" />
     <Content Include="packages.config" />
     <Content Include="default.cshtml" />
     <Content Include="map-info.cshtml" />
     <Content Include="route-map.cshtml" />
     <Content Include="stops.cshtml" />
     <Content Include="terms-and-conditions.cshtml" />
-    <Content Include="Helpers.cshtml" />
     <Content Include="App_Code\Helpers.cshtml" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\README.md" />
+    <None Include="App_Data\PublishProfiles\csmgtfs.pubxml" />
+    <None Include="gtfs.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -133,7 +163,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="javascript-protobuf\" />
   </ItemGroup>
   <PropertyGroup>
