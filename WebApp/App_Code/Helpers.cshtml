@@ -1,0 +1,32 @@
+﻿@helper ParsedFileList(string Extension)
+{
+    <table class="table table-bordered table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Last Update UTC</th>
+                <th>Description</th>
+                <th>Documentation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var Item in GtfsTable.GetAll(Extension))
+            {
+                <tr>
+                    <td>
+                        <a href="<%# Item.FilePath %>">@Item.FileName</a>
+                    </td>
+                    <td class="file-time">
+                        <span>@Item.LastUpdateUtc.ToString("yyyy-MM-ddTHH:mm:ssZ")</span>
+                    </td>
+                    <td>
+                        @Item.Description
+                    </td>
+                    <td>
+                        <a href="@Item.DocumentationUrl" target="_blank">@Item.Name</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,26 @@
+﻿@using System.Linq;
+@using Newtonsoft.Json;
+@{
+    var serializer = new JsonSerializer();
+    var gtfs = new gtfs_json.gtfs();
+    using (var stream = new JsonTextWriter(new StreamWriter(Response.OutputStream)))
+    {
+        if (UrlData.Count == 5)
+        {
+            var stop_id = UrlData[0];
+            var service_id = UrlData[2];
+            var route_id = UrlData[3];
+            var direction_id = UrlData[4];
+            var stop = gtfs.stops[stop_id];
+            var service = gtfs.services[service_id];
+            var route = gtfs.routes[route_id];
+            var direction = route.directions[direction_id];
+            var results = new { stop_times_html = String.Format("<p style='white-space: nowrap;'>{0}<br />Stop #{1}</p><div style='height: 20ex; width: 100%; overflow-y: scroll;'>{2}</div>", stop.stop_name, stop.stop_code, String.Join("<br/>", direction.trips.Values.Where(trip => trip.service == service).SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue).Select(stop_time => stop_time.arrival_time.Value)).OrderBy(stop_time => stop_time).Select(stop_time => String.Format(stop_time.TimeOfDay < new TimeSpan(12, 0, 0) ? "{0:h:mmtt}" : "<strong>{0:h:mmtt}</strong>", stop_time)))) };
+            serializer.Serialize(stream, results);
+        }
+        else
+        {
+            serializer.Serialize(stream, gtfs.stops);
+        }
+    }
+}

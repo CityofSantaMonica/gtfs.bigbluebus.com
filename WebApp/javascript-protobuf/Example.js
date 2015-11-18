@@ -7,7 +7,7 @@ var markers = [];
 var mapLabels = [];
 var infoWindow = new google.maps.InfoWindow({ content: "" });
 var ProtoBuf = dcodeIO.ProtoBuf;
-var transit_realtime = ProtoBuf.loadProtoFile("javascript-protobuf/gtfs-realtime.proto").build('transit_realtime'); // "transit_realtime" is the package name inside the proto file
+var transit_realtime = ProtoBuf.loadProtoFile("/javascript-protobuf/gtfs-realtime.proto").build('transit_realtime'); // "transit_realtime" is the package name inside the proto file
 var initialPoisition = false;
 var VehiclePositionsFeedMessage;
 var TripUpdatesFeedMessage;
@@ -66,7 +66,7 @@ function markVehicles() {
         var marker = new google.maps.Marker({
             position: latLng,
             map: map,
-            title: route.route_short_name.concat(" - ", trip.trip_headsign, " - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")),
+            title: route.route_short_name.concat(" - ", trip.trip_headsign, " [", trip.block_id, "] - ", delay == undefined ? vehicle.id : vehicle.id.concat(" (", delay > 0 ? "+" : "", delay, " min)")),
             icon: {
                 path: "M 10,5 A 5,5 0 0 1 5,10 5,5 0 0 1 0,5 5,5 0 0 1 5,0 5,5 0 0 1 10,5 Z", // SVG path draws circle that can be filled with route color
                 anchor: new google.maps.Point(5, 5),

@@ -1,4 +1,4 @@
-import itertools
+﻿import itertools
 import json
 import operator
 import os
@@ -21,7 +21,7 @@ if not os.path.exists(parsedpath):
 while True:
     currentzipstat = os.stat(currentzippath)
     if previous_mtime != currentzipstat.st_mtime:
-        print "GTFS:" + str(currentzipstat.st_mtime)
+        #print "GTFS:" + str(currentzipstat.st_mtime)
 
         if zipfile.is_zipfile(currentzippath):
 
@@ -115,7 +115,7 @@ while True:
             root = ET.Element("{http://gtfs.bigbluebus.com/gtfs.xsd}gtfs", { "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation" : "http://gtfs.bigbluebus.com/ gtfs.xsd" })
             agencies = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}agencies")
             for agency in schedule.GetAgencyList():
-                item=ET.SubElement(agencies, "{http://gtfs.bigbluebus.com/gtfs.xsd}agency", { "agency_name" : agency.agency_name, "agency_url" : agency.agency_url, "agency_timezone" : agency.agency_timezone })
+                item = ET.SubElement(agencies, "{http://gtfs.bigbluebus.com/gtfs.xsd}agency", { "agency_name" : agency.agency_name, "agency_url" : agency.agency_url, "agency_timezone" : agency.agency_timezone })
                 if agency.agency_id:
                     item.set("agency_id", agency.agency_id)
                 if agency.agency_lang:
@@ -131,7 +131,7 @@ while True:
             root = ET.Element("{http://gtfs.bigbluebus.com/gtfs.xsd}gtfs", { "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation" : "http://gtfs.bigbluebus.com/ gtfs.xsd" })
             stops = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}stops")
             for stop in schedule.GetStopList():
-                item=ET.SubElement(stops, "{http://gtfs.bigbluebus.com/gtfs.xsd}stop", {"stop_id" : stop.stop_id, "stop_name" : stop.stop_name, "stop_lat" : str(stop.stop_lat), "stop_lon" : str(stop.stop_lon) })
+                item = ET.SubElement(stops, "{http://gtfs.bigbluebus.com/gtfs.xsd}stop", {"stop_id" : stop.stop_id, "stop_name" : stop.stop_name, "stop_lat" : str(stop.stop_lat), "stop_lon" : str(stop.stop_lon) })
                 if stop.stop_code:
                     item.set("stop_code", stop.stop_code)
                 if stop.stop_desc:
@@ -155,7 +155,7 @@ while True:
             root = ET.Element("{http://gtfs.bigbluebus.com/gtfs.xsd}gtfs", { "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation" : "http://gtfs.bigbluebus.com/ gtfs.xsd" })
             routes = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}routes")
             for route in schedule.GetRouteList():
-                item=ET.SubElement(routes, "{http://gtfs.bigbluebus.com/gtfs.xsd}route", {"route_id" : route.route_id, "route_short_name" : route.route_short_name, "route_long_name" : route.route_long_name, "route_type" : str(route.route_type) })
+                item = ET.SubElement(routes, "{http://gtfs.bigbluebus.com/gtfs.xsd}route", {"route_id" : route.route_id, "route_short_name" : route.route_short_name, "route_long_name" : route.route_long_name, "route_type" : str(route.route_type) })
                 if route.agency_id:
                     item.set("agency_id", route.agency_id)
                 if route.route_desc:
@@ -173,7 +173,7 @@ while True:
             root = ET.Element("{http://gtfs.bigbluebus.com/gtfs.xsd}gtfs", { "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation" : "http://gtfs.bigbluebus.com/ gtfs.xsd" })
             trips = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}trips")
             for trip in schedule.GetTripList():
-                item=ET.SubElement(trips, "{http://gtfs.bigbluebus.com/gtfs.xsd}trip", {"route_id" : trip.route_id, "service_id" : trip.service_id, "trip_id" : trip.trip_id })
+                item = ET.SubElement(trips, "{http://gtfs.bigbluebus.com/gtfs.xsd}trip", {"route_id" : trip.route_id, "service_id" : trip.service_id, "trip_id" : trip.trip_id })
                 if trip.trip_headsign:
                     item.set("trip_headsign", trip.trip_headsign)
                 if trip.trip_short_name:
@@ -196,7 +196,7 @@ while True:
             stop_times = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}stop_times")
             for trip in schedule.GetTripList():
                 for stop_time in sorted(trip.GetStopTimes(), key=lambda item: item.stop_sequence):
-                    item=ET.SubElement(stop_times, "{http://gtfs.bigbluebus.com/gtfs.xsd}stop_time", {"trip_id" : trip.trip_id, "arrival_time" : stop_time.arrival_time, "departure_time" : stop_time.departure_time, "stop_id" : stop_time.stop_id, "stop_sequence" : str(stop_time.stop_sequence) })
+                    item = ET.SubElement(stop_times, "{http://gtfs.bigbluebus.com/gtfs.xsd}stop_time", {"trip_id" : trip.trip_id, "arrival_time" : stop_time.arrival_time, "departure_time" : stop_time.departure_time, "stop_id" : stop_time.stop_id, "stop_sequence" : str(stop_time.stop_sequence) })
                     if stop_time.stop_headsign:
                         item.set("stop_headsign", stop_time.stop_headsign)
                     if stop_time.pickup_type:
@@ -214,7 +214,7 @@ while True:
             root = ET.Element("{http://gtfs.bigbluebus.com/gtfs.xsd}gtfs", { "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation" : "http://gtfs.bigbluebus.com/ gtfs.xsd" })
             calendar = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}calendar")
             for servicePeriod in schedule.GetServicePeriodList():
-                item=ET.SubElement(calendar, "{http://gtfs.bigbluebus.com/gtfs.xsd}service", {"service_id" : servicePeriod.service_id, "monday" : str(servicePeriod.monday), "tuesday" : str(servicePeriod.tuesday), "wednesday" : str(servicePeriod.wednesday), "thursday" : str(servicePeriod.thursday), "friday" : str(servicePeriod.friday), "saturday" : str(servicePeriod.saturday), "sunday" : str(servicePeriod.sunday), "start_date" : servicePeriod.start_date, "end_date" : servicePeriod.end_date })
+                item = ET.SubElement(calendar, "{http://gtfs.bigbluebus.com/gtfs.xsd}service", {"service_id" : servicePeriod.service_id, "monday" : str(servicePeriod.monday), "tuesday" : str(servicePeriod.tuesday), "wednesday" : str(servicePeriod.wednesday), "thursday" : str(servicePeriod.thursday), "friday" : str(servicePeriod.friday), "saturday" : str(servicePeriod.saturday), "sunday" : str(servicePeriod.sunday), "start_date" : servicePeriod.start_date, "end_date" : servicePeriod.end_date })
             tree = ET.ElementTree(root)
             tree.write(os.path.join(parsedpath, "calendar.xml"), xml_declaration=True, encoding='utf-8', method="xml")
 
@@ -224,7 +224,7 @@ while True:
             calendar = transitfeed.ServicePeriod()
             for calendar in schedule.GetServicePeriodList():
                 for calendar_date in calendar.GetCalendarDatesFieldValuesTuples():
-                    item=ET.SubElement(calendar_dates, "{http://gtfs.bigbluebus.com/gtfs.xsd}calendar_date", { "service_id" : calendar_date[0], "date" : calendar_date[1], "exception_type" : calendar_date[2] })
+                    item = ET.SubElement(calendar_dates, "{http://gtfs.bigbluebus.com/gtfs.xsd}calendar_date", { "service_id" : calendar_date[0], "date" : calendar_date[1], "exception_type" : calendar_date[2] })
             tree = ET.ElementTree(root)
             tree.write(os.path.join(parsedpath, "calendar_dates.xml"), xml_declaration=True, encoding='utf-8', method="xml")
 
@@ -232,7 +232,7 @@ while True:
             root = ET.Element("{http://gtfs.bigbluebus.com/gtfs.xsd}gtfs", { "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation" : "http://gtfs.bigbluebus.com/ gtfs.xsd" })
             fare_attributes = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}fare_attributes")
             for fare_attribute in schedule.GetFareAttributeList():
-                item=ET.SubElement(fare_attributes, "{http://gtfs.bigbluebus.com/gtfs.xsd}fare_attribute", {"fare_id" : fare_attribute.fare_id, "price" : str(fare_attribute.price), "currency_type" : str(fare_attribute.currency_type), "payment_method" : str(fare_attribute.payment_method), "transfers" : str(fare_attribute.transfers) })
+                item = ET.SubElement(fare_attributes, "{http://gtfs.bigbluebus.com/gtfs.xsd}fare_attribute", {"fare_id" : fare_attribute.fare_id, "price" : str(fare_attribute.price), "currency_type" : str(fare_attribute.currency_type), "payment_method" : str(fare_attribute.payment_method), "transfers" : str(fare_attribute.transfers) })
                 if fare_attribute.transfer_duration:
                     item.set("transfer_duration", str(fare_attribute.transfer_duration))
             tree = ET.ElementTree(root)
@@ -243,7 +243,7 @@ while True:
             fare_rules = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}fare_rules")
             for fare_attribute in schedule.GetFareAttributeList():
                 for fare_rule in fare_attribute.GetFareRuleList():
-                    item=ET.SubElement(fare_rules, "{http://gtfs.bigbluebus.com/gtfs.xsd}fare_rule", {"fare_id" : fare_attribute.fare_id })
+                    item = ET.SubElement(fare_rules, "{http://gtfs.bigbluebus.com/gtfs.xsd}fare_rule", {"fare_id" : fare_attribute.fare_id })
                     if fare_rule.route_id:
                         item.set("route_id", fare_rule.route_id)
                     if fare_rule.origin_id is not None:
@@ -259,7 +259,7 @@ while True:
             root = ET.Element("{http://gtfs.bigbluebus.com/gtfs.xsd}gtfs", { "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation" : "http://gtfs.bigbluebus.com/ gtfs.xsd" })
             shapes = ET.SubElement(root, "{http://gtfs.bigbluebus.com/gtfs.xsd}shapes")
             for shape in schedule.GetShapeList():
-                item=ET.SubElement(shapes, "{http://gtfs.bigbluebus.com/gtfs.xsd}shape", { "shape_id" : shape.shape_id })
+                item = ET.SubElement(shapes, "{http://gtfs.bigbluebus.com/gtfs.xsd}shape", { "shape_id" : shape.shape_id })
                 for point in shape.points:
                     ET.SubElement(item, "{http://gtfs.bigbluebus.com/gtfs.xsd}shape_pt", { "shape_pt_lat" : str(point[0]), "shape_pt_lon" : str(point[1]) })
             tree = ET.ElementTree(root)
@@ -268,6 +268,54 @@ while True:
 
 
             #export gis files in geojson
+
+            #export distinct traces with route information
+            tripList = schedule.GetTripList()
+            features = []
+            shapeList = sorted(tripList, key=lambda item: item.shape_id)
+            directionList = sorted(shapeList, key=lambda item: item.direction_id)
+            routeList = sorted(directionList, key=lambda item: item.route_id)
+            for route_id, directionList in itertools.groupby(routeList, key=lambda item: item.route_id):
+                trip_route = next(directionList)
+                route = schedule.GetRoute(trip_route.route_id)
+                for direction_id, shapeList in itertools.groupby(directionList, key=lambda item: item.direction_id):
+                    trip_direction = next(shapeList)
+                    lines = [[]]
+                    previousSegments = [[]]
+                    currentLine = 0
+                    drawingLine = False
+                    for shape_id, tripList in itertools.groupby(shapeList, key=lambda item: item.shape_id):
+                        trip = next(tripList)
+                        shape = schedule.GetShape(trip.shape_id)
+                        trace = [[point[1], point[0]] for point in shape.points]
+                        for pointIndex, point in enumerate(trace):
+                            if pointIndex == 0:
+                                pointEnd = point
+                            else:
+                                pointStart = pointEnd
+                                pointEnd = point
+                                segment = [pointStart, pointEnd]
+                                if segment in previousSegments:
+                                    if drawingLine:
+                                        currentLine += 1
+                                        lines.append([])
+                                        drawingLine = False
+                                else: # create this line
+                                    if drawingLine: # continue line
+                                        lines[currentLine].append(pointEnd)
+                                    else: # begin line
+                                        lines[currentLine].append(pointStart)
+                                        lines[currentLine].append(pointEnd)
+                                        drawingLine = True
+                                    previousSegments.append(segment)
+                        if drawingLine:
+                            currentLine += 1
+                            lines.append([])
+                            drawingLine = False
+                    feature = {"type": "Feature", "properties": { "route_id" : route.route_id, "direction_id" : trip.direction_id, "route_color" : route.route_color }, "geometry" : { "type": "MultiLineString","coordinates": [[[point[0], point[1]] for point in line] for line in lines] } }
+                    features.append(feature)
+            forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }, "features": features }
+            json.dump(forJson, open(os.path.join(parsedpath, "traces.geojson"),"w"))
 
             #export shapes with route information
             tripList = schedule.GetTripList()

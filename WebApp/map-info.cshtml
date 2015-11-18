@@ -1,0 +1,67 @@
+﻿@using System.Linq;
+@using Newtonsoft.Json;
+@{
+    if (UrlData.Count > 0)
+    {
+        var route_short_name = UrlData[0];
+        var serializer = new JsonSerializer();
+        var gtfs = new gtfs_json.gtfs();
+        var shapes = gtfs.shapes;
+        var routes = gtfs.routes.Values.Where(route => route.route_short_name == route_short_name);
+        var route_ids = routes.Select(route => route.route_id).ToArray();
+        var standard_services = gtfs.services.Values.Where(service => ((service.monday && service.tuesday && service.wednesday && service.thursday && service.friday) || service.saturday || service.sunday) && service.trips.Values.Any(trip => route_ids.Contains(trip.route_id)));
+        using (var stream = new JsonTextWriter(new StreamWriter(Response.OutputStream)))
+        {
+            serializer.Serialize(stream,
+                standard_services.OrderBy(item => item.start_date)
+                .GroupBy(service => String.Format("{0:MMM-dd-yyyy} - {1:MMM-dd-yyyy}", service.start_date, service.end_date))
+                .ToDictionary(services => services.Key, services => services
+                .ToDictionary(service => service.service_id, service =>
+                  new
+                  {
+                      name = ServiceName(service),
+                      service_id = service.service_id,
+                      monday = service.monday,
+                      tuesday = service.tuesday,
+                      wednesday = service.wednesday,
+                      thursday = service.thursday,
+                      friday = service.friday,
+                      saturday = service.saturday,
+                      sunday = service.sunday,
+                      start_date = service.start_date,
+                      end_date = service.end_date,
+                      route = service.trips.Values.First(trip => trip.route.route_short_name == route_short_name).route,
+                      directions = service.trips.Values.Where(trip => trip.route.route_short_name == route_short_name)
+                      .GroupBy(trip => trip.direction_id)
+                      .ToDictionary(trips => trips.Key, trips =>
+                        new
+                        {
+                            shape_ids = trips.GroupBy(trip => trip.shape_id).Select(trip => trip.Key),
+                            stop_ids = trips.SelectMany(trip=>trip.stops.Values).GroupBy(stop=>stop.stop_id).Select(stop=>stop.Key),
+                            direction_id = trips.Key,
+                            trip_headsign = LongestTripHeadsign(trips)
+                        }
+                      )
+                  })
+                ));
+        }
+    }
+}
+@functions{
+    String ServiceName(gtfs_json.service service)
+    {
+        if (service.monday && service.tuesday && service.wednesday && service.thursday && service.friday && !service.saturday && !service.sunday)
+            return "Weekday";
+        if (!service.monday && !service.tuesday && !service.wednesday && !service.thursday && !service.friday && service.saturday && service.sunday)
+            return "Weekend";
+        if (!service.monday && !service.tuesday && !service.wednesday && !service.thursday && !service.friday && service.saturday && !service.sunday)
+            return "Saturday";
+        if (!service.monday && !service.tuesday && !service.wednesday && !service.thursday && !service.friday && !service.saturday && service.sunday)
+            return "Sunday";
+        return null;
+    }
+    String LongestTripHeadsign(IEnumerable<gtfs_json.trip> trips)
+    {
+        return trips.OrderByDescending(trip => trip.stops.Count).First().trip_headsign;
+    }
+}

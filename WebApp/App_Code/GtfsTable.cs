@@ -18,8 +18,9 @@ public class GtfsTable
     public Boolean Exists { get; set; }
     public DateTime LastUpdateUtc { get; set; }
 
-    public static IEnumerable<GtfsTable> GetAll(String extension, HttpServerUtility server)
+    public static IEnumerable<GtfsTable> GetAll(String extension)
     {
+        var server = HttpContext.Current.Server;
         var tables = new[]{
             new GtfsTable{ Name="agency", Description="One or more transit agencies that provide the data in this feed."},
             new GtfsTable{ Name="stops", Description="Individual locations where vehicles pick up or drop off passengers."},
