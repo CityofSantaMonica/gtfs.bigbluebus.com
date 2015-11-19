@@ -6,7 +6,7 @@
         var route_short_name = UrlData[0];
         var serializer = new JsonSerializer();
         var gtfs = new gtfs_json.gtfs();
-        var shapes = gtfs.shapes;
+        //var shapes = gtfs.shapes;
         var routes = gtfs.routes.Values.Where(route => route.route_short_name == route_short_name);
         var route_ids = routes.Select(route => route.route_id).ToArray();
         var standard_services = gtfs.services.Values.Where(service => ((service.monday && service.tuesday && service.wednesday && service.thursday && service.friday) || service.saturday || service.sunday) && service.trips.Values.Any(trip => route_ids.Contains(trip.route_id)));

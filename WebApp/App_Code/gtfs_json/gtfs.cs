@@ -19,17 +19,17 @@ namespace gtfs_json
             calendar_dates = context.Cache["GTFSJSON.calendar_dates"] as calendar_dates;
             routes = context.Cache["GTFSJSON.routes"] as routes;
             services = context.Cache["GTFSJSON.services"] as services;
-            shapes = context.Cache["GTFSJSON.shapes"] as shapes;
+            //shapes = context.Cache["GTFSJSON.shapes"] as shapes;
             stops = context.Cache["GTFSJSON.stops"] as stops;
             stop_times_trips = context.Cache["GTFSJSON.stop_times_trips"] as stop_times_trips;
             trips = context.Cache["GTFSJSON.trips"] as trips;
 
-            if (calendar_dates == null || routes == null || services == null || shapes == null || stops == null || stop_times_trips == null || trips == null)
+            if (calendar_dates == null || routes == null || services == null /* || shapes == null*/ || stops == null || stop_times_trips == null || trips == null)
             {
                 var calendar_dates_path = context.Server.MapPath("/parsed/calendar_dates.json");
                 var routes_path = context.Server.MapPath("/parsed/routes.json");
                 var services_path = context.Server.MapPath("/parsed/calendar.json");
-                var shapes_path = context.Server.MapPath("/parsed/shapes.json");
+                //var shapes_path = context.Server.MapPath("/parsed/shapes.json");
                 var stops_path = context.Server.MapPath("/parsed/stops.json");
                 var stop_times_trips_path = context.Server.MapPath("/parsed/stop_times.json");
                 var trips_path = context.Server.MapPath("/parsed/trips.json");
@@ -45,10 +45,10 @@ namespace gtfs_json
                 {
                     services = serializer.Deserialize<services>(new JsonTextReader(new StreamReader(stream)));
                 }
-                using (var stream = File.Open(shapes_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    shapes = serializer.Deserialize<shapes>(new JsonTextReader(new StreamReader(stream)));
-                }
+                //using (var stream = File.Open(shapes_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                //{
+                //    shapes = serializer.Deserialize<shapes>(new JsonTextReader(new StreamReader(stream)));
+                //}
                 using (var stream = File.Open(stops_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     stops = serializer.Deserialize<stops>(new JsonTextReader(new StreamReader(stream)));
@@ -70,7 +70,7 @@ namespace gtfs_json
                 context.Cache.Add("GTFSJSON.calendar_dates", calendar_dates, new CacheDependency(calendar_dates_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 context.Cache.Add("GTFSJSON.routes", routes, new CacheDependency(routes_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 context.Cache.Add("GTFSJSON.services", services, new CacheDependency(services_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
-                context.Cache.Add("GTFSJSON.shapes", stops, new CacheDependency(shapes_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                //context.Cache.Add("GTFSJSON.shapes", stops, new CacheDependency(shapes_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 context.Cache.Add("GTFSJSON.stops", stops, new CacheDependency(stops_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 context.Cache.Add("GTFSJSON.stop_times_trips", stop_times_trips, new CacheDependency(stop_times_trips_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
                 context.Cache.Add("GTFSJSON.trips", trips, new CacheDependency(trips_path), Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
@@ -79,7 +79,7 @@ namespace gtfs_json
         public calendar_dates calendar_dates { get; set; }
         public routes routes { get; set; }
         public services services { get; set; }
-        public shapes shapes { get; set; }
+        //public shapes shapes { get; set; }
         public stops stops { get; set; }
         public trips trips { get; set; }
     }
