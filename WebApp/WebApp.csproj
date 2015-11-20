@@ -132,6 +132,8 @@
     <None Include="gtfs.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\csmgtfs - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\csmgtfs - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
