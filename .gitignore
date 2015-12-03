@@ -211,3 +211,6 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 *.pubxml
+WebApp/parsed/
+*.bin
+*.zip
