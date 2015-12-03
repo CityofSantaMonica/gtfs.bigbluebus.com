@@ -366,6 +366,7 @@ while True:
                 coordinate_list = [(longitude, latitude) for (latitude, longitude, distance) in shape.points]
                 coordinate_str_list = ["%f,%f" % t for t in coordinate_list]
                 placemark = ET.SubElement(folder, "{http://www.opengis.net/kml/2.2}Placemark")
+                name = ET.SubElement(placemark, "{http://www.opengis.net/kml/2.2}name").text = shape.shape_id
                 style = ET.SubElement(placemark, "{http://www.opengis.net/kml/2.2}Style")
                 linestyle = ET.SubElement(style, "{http://www.opengis.net/kml/2.2}LineStyle")
                 ET.SubElement(linestyle, "{http://www.opengis.net/kml/2.2}color").text = "FF" + route.route_color
@@ -395,6 +396,7 @@ while True:
             stopList = schedule.GetStopList()
             for stop in stopList:
                 placemark = ET.SubElement(folder, "{http://www.opengis.net/kml/2.2}Placemark")
+                name = ET.SubElement(placemark, "{http://www.opengis.net/kml/2.2}name").text = stop.stop_name
                 extendeddata = ET.SubElement(placemark, "{http://www.opengis.net/kml/2.2}ExtendedData")
                 schemadata = ET.SubElement(extendeddata, "{http://www.opengis.net/kml/2.2}SchemaData", {"schemaUrl": "#stops"})
                 ET.SubElement(schemadata,"{http://www.opengis.net/kml/2.2}SimpleData", {"name":"stop_id"}).text = stop.stop_id
