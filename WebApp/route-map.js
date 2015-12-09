@@ -19,11 +19,7 @@ function loadMap() {
     var service = services[$service];
     var route = service.route;
     var direction = service.directions[$direction];
-    var markerIcon = { anchor: new google.maps.Point(8, 16), fillColor: "#".concat(route.route_color), fillOpacity: 1, path: 'M 12.246441,5.2366548 C 12.274328,8 8,8 7.9982206,16.032918 8,8 3.6455,8 3.6432384,5.272242 3.6409768,2.544484 5.3045249,0.48991045 7.9982206,0.49021352 10.691916,0.49051659 12.218554,2.4733096 12.246441,5.2366548 Z' };
-    if (show_arrows) {
-        markerIcon.anchor = null;
-        markerIcon.path = 'M 5,0 A 5,5 0 0 1 0,5 5,5 0 0 1 -5,0 5,5 0 0 1 0,-5 5,5 0 0 1 5,0 Z';
-    }
+    var markerIcon = { fillColor: "#".concat(route.route_color), fillOpacity: 1, path: 'M 5,0 A 5,5 0 0 1 0,5 5,5 0 0 1 -5,0 5,5 0 0 1 0,-5 5,5 0 0 1 5,0 Z' };
     map.data.setStyle(function (feature) {
         var shape_id = feature.getProperty('shape_id');
         var visible = false;
@@ -66,7 +62,9 @@ function loadMap() {
                     strokeWeight: 2
                 });
                 if (show_arrows)
-                    polyline.setOptions({ icons: [{ icon: { path: 'M 2,-1 5,-4 8,-1 5,-4 5,4', strokeColor: "#000000", strokeWeight: 1 }, offset: '0', repeat: '100px' }] });
+                    polyline.setOptions({
+                        icons: [{icon: { path: 'M 6,-5 10,0 7,0 7,5 5,5 5,0 2,0 Z', fillColor: '#000000', fillOpacity: 1, strokeColor: "#FFFFFF", strokeWeight: 1 }, offset: '0', repeat: '100px' }]
+                    });
                 polylines.push(polyline);
             });
         }
@@ -199,7 +197,7 @@ function createRouteMap(hostUrl, routeShortName, showArrows) {
     else
         show_arrows = showArrows;
     var route_map = document.getElementById("route-map");
-    map = new google.maps.Map(route_map, { center: new google.maps.LatLng(34.013776, -118.492043), zoom: 12, draggableCursor: 'wait' });
+    map = new google.maps.Map(route_map, { center: new google.maps.LatLng(34.013776, -118.492043), zoom: 12, draggableCursor: 'wait', styles: [{ "featureType": "transit.station.bus", "elementType": "labels.icon", "stylers": [{ "visibility": "off" }] }] });
     // load GeoJSON of routes to be shown when bus is selected
     // use transit layer to provider better color contrast with transit routes
     var transitLayer = new google.maps.TransitLayer();
