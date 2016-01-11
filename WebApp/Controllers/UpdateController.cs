@@ -14,35 +14,42 @@ namespace WebApp
         public HttpResponseMessage Post([FromUri] string id)
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            switch (id)
+            var Authorization = System.Configuration.ConfigurationManager.AppSettings["Authorization"];
+            if (Request.Headers.Contains("Authorization") && Request.Headers.GetValues("Authorization").Any(item=>item == Authorization))
             {
-                case "alerts":
-                case "tripupdates":
-                case "vehiclepositions":
-                    {
-                        var task = this.Request.Content.ReadAsStreamAsync();
-                        task.Wait();
-                        Stream requestStream = task.Result;
-                        try
+                switch (id)
+                {
+                    case "alerts":
+                    case "tripupdates":
+                    case "vehiclepositions":
                         {
-                            Stream fileStream = File.Create(HttpContext.Current.Server.MapPath("~/" + id + ".bin"));
-                            requestStream.CopyTo(fileStream);
-                            fileStream.Close();
-                            requestStream.Close();
-                            response.StatusCode = HttpStatusCode.Created;
-                            return response;
+                            var task = this.Request.Content.ReadAsStreamAsync();
+                            task.Wait();
+                            Stream requestStream = task.Result;
+                            try
+                            {
+                                Stream fileStream = File.Create(HttpContext.Current.Server.MapPath("~/" + id + ".bin"));
+                                requestStream.CopyTo(fileStream);
+                                fileStream.Close();
+                                requestStream.Close();
+                                response.StatusCode = HttpStatusCode.Created;
+                                return response;
+                            }
+                            catch (IOException)
+                            {
+                                throw new HttpResponseException(HttpStatusCode.InternalServerError);
+                            }
                         }
-                        catch (IOException)
-                        {
-                            throw new HttpResponseException(HttpStatusCode.InternalServerError);
-                        }
-                    }
-                    break;
-                default:
-                    break;
+                    default:
+                        response.StatusCode = HttpStatusCode.BadRequest;
+                        return response;
+                }
             }
-            response.StatusCode = HttpStatusCode.BadRequest;
-            return response;
+            else
+            {
+                response.StatusCode = HttpStatusCode.Forbidden;
+                return response;
+            }
         }
         /*
         // GET api/<controller>
