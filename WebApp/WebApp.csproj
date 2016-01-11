@@ -133,6 +133,10 @@
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\util.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\version.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\__init__.py" />
+    <Content Include="javascript-protobuf\ByteBufferAB.js" />
+    <Content Include="javascript-protobuf\Example.js" />
+    <Content Include="javascript-protobuf\Long.js" />
+    <Content Include="javascript-protobuf\ProtoBuf.js" />
     <Content Include="packages.config" />
     <Content Include="default.cshtml" />
     <Content Include="map-info.cshtml" />
@@ -145,6 +149,8 @@
     <None Include="gtfs.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="javascript-protobuf\gtfs-realtime.proto" />
+    <Content Include="javascript-protobuf\README.md" />
     <None Include="Properties\PublishProfiles\csmgtfs - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\csmgtfs - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\testgtfsrupdate - FTP.pubxml" />
@@ -166,7 +172,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UpdateController.cs" />
+    <Compile Include="Controllers\UpdateController.cs" />
     <Content Include="App_Code\GtfsFile.cs" />
     <Content Include="App_Code\GtfsTable.cs" />
     <Content Include="App_Code\NavBarItem.cs" />
@@ -181,9 +187,7 @@
     <Content Include="App_Code\gtfs_json\trip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="javascript-protobuf\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

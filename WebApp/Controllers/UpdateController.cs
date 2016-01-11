@@ -16,16 +16,16 @@ namespace WebApp
             HttpResponseMessage response = new HttpResponseMessage();
             switch (id)
             {
-                case "alerts.bin":
-                case "tripupdates.bin":
-                case "vehiclepositions.bin":
+                case "alerts":
+                case "tripupdates":
+                case "vehiclepositions":
                     {
                         var task = this.Request.Content.ReadAsStreamAsync();
                         task.Wait();
                         Stream requestStream = task.Result;
                         try
                         {
-                            Stream fileStream = File.Create(HttpContext.Current.Server.MapPath("~/test/" + id));
+                            Stream fileStream = File.Create(HttpContext.Current.Server.MapPath("~/" + id + ".bin"));
                             requestStream.CopyTo(fileStream);
                             fileStream.Close();
                             requestStream.Close();

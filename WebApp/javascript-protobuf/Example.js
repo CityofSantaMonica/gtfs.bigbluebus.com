@@ -7,7 +7,7 @@ var markers = [];
 var mapLabels = [];
 var infoWindow = new google.maps.InfoWindow({ content: "" });
 var ProtoBuf = dcodeIO.ProtoBuf;
-var transit_realtime = ProtoBuf.loadProtoFile("/javascript-protobuf/gtfs-realtime.proto").build('transit_realtime'); // "transit_realtime" is the package name inside the proto file
+var transit_realtime = ProtoBuf.loadProtoFile("javascript-protobuf/gtfs-realtime.proto").build('transit_realtime'); // "transit_realtime" is the package name inside the proto file
 var initialPoisition = false;
 var VehiclePositionsFeedMessage;
 var TripUpdatesFeedMessage;
