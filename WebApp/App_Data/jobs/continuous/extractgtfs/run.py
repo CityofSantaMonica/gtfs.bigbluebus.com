@@ -431,7 +431,7 @@ while True:
                 route = schedule.GetRoute(trip.route_id)
                 shape = schedule.GetShape(shape_id)
                 writer.line(parts=[[[point[1], point[0]] for point in shape.points]])
-                writer.record(shape.shape_id, trip.direction_id, trip.trip_headsign, route.route_short_name, route.route_long_name, route.route_color)
+                writer.record(shape.shape_id, trip.direction_id, trip.trip_headsign.replace(u'\u21b6',"").replace(u'\u21b7' ,""), route.route_short_name, route.route_long_name, route.route_color)
             writer.saveShp(shp)
             writer.saveShx(shx)
             writer.saveDbf(dbf)
