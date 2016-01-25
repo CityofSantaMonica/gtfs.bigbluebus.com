@@ -25,17 +25,13 @@ while True:
 
         if zipfile.is_zipfile(currentzippath):
 
-            # export gtfs as csv
-
-            currentzip = zipfile.ZipFile(currentzippath,'r')
-            currentzip.extractall(parsedpath)
-
             #load gtfs from zip file
-
             schedule = transitfeed.Schedule()
             schedule.Load(currentzippath)
 
-
+            # export gtfs as csv
+            currentzip = zipfile.ZipFile(currentzippath,'r')
+            currentzip.extractall(parsedpath)
 
             #export gtfs as json
 
@@ -269,51 +265,56 @@ while True:
 
             #export gis files in geojson
 
-            #export distinct traces with route information
+            #export distinct traces with route, service, and direction information
             tripList = schedule.GetTripList()
             features = []
             shapeList = sorted(tripList, key=lambda item: item.shape_id)
             directionList = sorted(shapeList, key=lambda item: item.direction_id)
-            routeList = sorted(directionList, key=lambda item: item.route_id)
-            for route_id, directionList in itertools.groupby(routeList, key=lambda item: item.route_id):
-                trip_route = next(directionList)
+            serviceList = sorted(directionList, key=lambda item: item.service_id)
+            routeList = sorted(serviceList, key=lambda item: item.route_id)
+            for route_id, serviceList in itertools.groupby(routeList, key=lambda item: item.route_id):
+                trip_route = next(serviceList)
                 route = schedule.GetRoute(trip_route.route_id)
-                for direction_id, shapeList in itertools.groupby(directionList, key=lambda item: item.direction_id):
-                    trip_direction = next(shapeList)
-                    lines = [[]]
-                    previousSegments = [[]]
-                    currentLine = 0
-                    drawingLine = False
-                    for shape_id, tripList in itertools.groupby(shapeList, key=lambda item: item.shape_id):
-                        trip = next(tripList)
-                        shape = schedule.GetShape(trip.shape_id)
-                        trace = [[point[1], point[0]] for point in shape.points]
-                        for pointIndex, point in enumerate(trace):
-                            if pointIndex == 0:
-                                pointEnd = point
-                            else:
-                                pointStart = pointEnd
-                                pointEnd = point
-                                segment = [pointStart, pointEnd]
-                                if segment in previousSegments:
-                                    if drawingLine:
-                                        currentLine += 1
-                                        lines.append([])
-                                        drawingLine = False
-                                else: # create this line
-                                    if drawingLine: # continue line
-                                        lines[currentLine].append(pointEnd)
-                                    else: # begin line
-                                        lines[currentLine].append(pointStart)
-                                        lines[currentLine].append(pointEnd)
-                                        drawingLine = True
-                                    previousSegments.append(segment)
-                        if drawingLine:
-                            currentLine += 1
-                            lines.append([])
+                for service_id, directionList in itertools.groupby(serviceList, key=lambda item: item.service_id):
+                    trip_service = next(directionList)
+                    service = schedule.GetServicePeriod(service_id)
+                    if service.day_of_week[0] | service.day_of_week[1] | service.day_of_week[2] | service.day_of_week[3] | service.day_of_week[4] | service.day_of_week[5] | service.day_of_week[6]:
+                        for direction_id, shapeList in itertools.groupby(directionList, key=lambda item: item.direction_id):
+                            trip_direction = next(shapeList)
+                            lines = [[]]
+                            previousSegments = [[]]
+                            currentLine = 0
                             drawingLine = False
-                    feature = {"type": "Feature", "properties": { "route_id" : route.route_id, "direction_id" : trip.direction_id, "route_color" : route.route_color }, "geometry" : { "type": "MultiLineString","coordinates": [[[point[0], point[1]] for point in line] for line in lines] } }
-                    features.append(feature)
+                            for shape_id, tripList in itertools.groupby(shapeList, key=lambda item: item.shape_id):
+                                trip = next(tripList)
+                                shape = schedule.GetShape(trip.shape_id)
+                                trace = [[point[1], point[0]] for point in shape.points]
+                                for pointIndex, point in enumerate(trace):
+                                    if pointIndex == 0:
+                                        pointEnd = point
+                                    else:
+                                        pointStart = pointEnd
+                                        pointEnd = point
+                                        segment = [pointStart, pointEnd]
+                                        if segment in previousSegments:
+                                            if drawingLine:
+                                                currentLine += 1
+                                                lines.append([])
+                                                drawingLine = False
+                                        else: # create this line
+                                            if drawingLine: # continue line
+                                                lines[currentLine].append(pointEnd)
+                                            else: # begin line
+                                                lines[currentLine].append(pointStart)
+                                                lines[currentLine].append(pointEnd)
+                                                drawingLine = True
+                                            previousSegments.append(segment)
+                                if drawingLine:
+                                    currentLine += 1
+                                    lines.append([])
+                                    drawingLine = False
+                            feature = {"type": "Feature", "properties": { "route_id" : route.route_id, "service_id" : trip.service_id, "direction_id" : trip.direction_id, "route_color" : route.route_color }, "geometry" : { "type": "MultiLineString","coordinates": [[[point[0], point[1]] for point in line] for line in lines] } }
+                            features.append(feature)
             forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }, "features": features }
             json.dump(forJson, open(os.path.join(parsedpath, "traces.geojson"),"w"))
 
@@ -338,8 +339,6 @@ while True:
                 features.append(feature)
             forJson = {"type": "FeatureCollection","crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } }, "features": features }
             json.dump(forJson, open(os.path.join(parsedpath, "stops.geojson"),"w"))
-
-
 
             #export gis files in kml
 

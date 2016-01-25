@@ -46,9 +46,10 @@ function loadMap() {
     }
     map.data.forEach(function (feature) {
         var route_id = feature.getProperty('route_id');
+        var service_id = feature.getProperty('service_id');
         var direction_id = feature.getProperty('direction_id');
         var route_color = feature.getProperty('route_color');
-        if (route.route_id == route_id && $direction == direction_id) {
+        if (route.route_id == route_id && $service == service_id && $direction == direction_id) {
             var multi_line_string = feature.getGeometry();
             multi_line_string.getArray().forEach(function (line_string) {
                 var vertices = [];
