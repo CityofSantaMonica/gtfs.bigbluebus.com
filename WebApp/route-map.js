@@ -235,6 +235,12 @@ function createRouteMap(hostUrl, routeShortName, showArrows) {
                                     $option.text(schedule_key);
                                     $schedule.append($option);
                                 }
+                                if ($schedule.children('option').length == 1) {
+                                    $("#schedule-dropdown-message").css("visibility", "hidden");
+                                }
+                                else {
+                                    $("#schedule-dropdown-message").css("visibility", "visible");
+                                }
                                 $schedule.change(loadWeekDays);
                                 loadWeekDays();
                             }
