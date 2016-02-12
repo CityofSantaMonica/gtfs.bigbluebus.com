@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace WebApp
 {
     public class UpdateController : ApiController
     {
-        public HttpResponseMessage Post([FromUri] string id)
+        public IHttpActionResult Post([FromUri] string id)
         {
-            HttpResponseMessage response = new HttpResponseMessage();
             var Authorization = System.Configuration.ConfigurationManager.AppSettings["Authorization"];
             if (Request.Headers.Contains("Authorization") && Request.Headers.GetValues("Authorization").Any(item=>item == Authorization))
             {
@@ -26,58 +23,43 @@ namespace WebApp
                             var task = this.Request.Content.ReadAsStreamAsync();
                             task.Wait();
                             Stream requestStream = task.Result;
-                            try
-                            {
-                                Stream fileStream = File.Create(HttpContext.Current.Server.MapPath("~/" + id + ".bin"));
-                                requestStream.CopyTo(fileStream);
-                                fileStream.Close();
-                                requestStream.Close();
-                                response.StatusCode = HttpStatusCode.Created;
-                                return response;
-                            }
-                            catch (IOException)
-                            {
-                                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-                            }
+                            return writeFile(requestStream, id, ".bin");
+                        }
+                    case "nextbus_current":
+                    case "nextbus_new":
+                        {
+                            var task = this.Request.Content.ReadAsStreamAsync();
+                            task.Wait();
+                            Stream requestStream = task.Result;
+                            return writeFile(requestStream, id, ".xml");
                         }
                     default:
-                        response.StatusCode = HttpStatusCode.BadRequest;
-                        return response;
+                        return BadRequest();
                 }
             }
             else
             {
-                response.StatusCode = HttpStatusCode.Forbidden;
-                return response;
+                return new StatusCodeResult(HttpStatusCode.Forbidden, Request);
             }
         }
-        /*
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        private IHttpActionResult writeFile(Stream requestStream, string file, string extension)
         {
-            return "value";
+            try
+            {
+                string filePath = HttpContext.Current.Server.MapPath("~/" + file + extension);
+                Stream fileStream = File.Create(filePath);
+                MemoryStream ms = new MemoryStream();
+                requestStream.CopyTo(fileStream);
+                requestStream.CopyTo(ms);
+                fileStream.Close();
+                requestStream.Close();
+                return Created(filePath, ms.ToArray());
+            }
+            catch (IOException)
+            {
+                return InternalServerError();
+            }
         }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
-        */
     }
 }
