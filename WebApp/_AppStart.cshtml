@@ -1,0 +1,9 @@
+﻿@using System.Web.Routing
+@using System.Web.Http
+@{
+    RouteTable.Routes.MapHttpRoute(
+             name: "DefaultApiRoute",
+             routeTemplate: "api/{controller}/{id}",
+             defaults: new { id = RouteParameter.Optional }
+         );
+}
