@@ -214,3 +214,4 @@ ModelManifest.xml
 WebApp/parsed/
 *.bin
 *.zip
+*.pyc

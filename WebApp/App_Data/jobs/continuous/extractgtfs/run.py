@@ -1,14 +1,7 @@
-﻿import itertools
-import json
-import operator
-import os
-import StringIO
-import sys
+﻿import os
 from time import sleep
-import xml.etree.cElementTree as ET
 import zipfile
 
-import shapefile
 import transitfeed
 
 parsedpath = "/home/site/wwwroot/parsed"
