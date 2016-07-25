@@ -107,6 +107,12 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\jobs\continuous\extractgtfs\exportJSON.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\exportXML.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\exportGeoJSON.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\exportKML.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\exportZIP.py" />
+    <Content Include="App_Data\jobs\continuous\extractgtfs\test.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\run.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\shapefile.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\agency.py" />
