@@ -13,24 +13,20 @@ def process(schedule, parsedpath):
     serviceList = sorted(directionList, key=lambda item: item.service_id)
     routeList = sorted(serviceList, key=lambda item: item.route_id)
     for route_id, serviceList in itertools.groupby(routeList, key=lambda item: item.route_id):
-        print(route_id)
-        #trip_route = next(serviceList)
+        #print(route_id)
         route = schedule.GetRoute(route_id)
         for service_id, directionList in itertools.groupby(serviceList, key=lambda item: item.service_id):
-            print("\t" + service_id)
-            #trip_service = next(directionList)
+            #print("\t" + service_id)
             service = schedule.GetServicePeriod(service_id)
             if service.day_of_week[0] | service.day_of_week[1] | service.day_of_week[2] | service.day_of_week[3] | service.day_of_week[4] | service.day_of_week[5] | service.day_of_week[6]:
                 for direction_id, shapeList in itertools.groupby(directionList, key=lambda item: item.direction_id):
-                    print("\t\t" + direction_id)
-                    #trip_direction = next(shapeList)
+                    #print("\t\t" + direction_id)
                     lines = [[]]
                     previousSegments = [[]]
                     currentLine = 0
                     drawingLine = False
                     for shape_id, tripList in itertools.groupby(shapeList, key=lambda item: item.shape_id):
-                        print("\t\t\t" + shape_id)
-                        #trip = next(tripList)
+                        #print("\t\t\t" + shape_id)
                         shape = schedule.GetShape(shape_id)
                         trace = [[point[1], point[0]] for point in shape.points]
                         for pointIndex, point in enumerate(trace):
