@@ -7,22 +7,26 @@ import exportXML
 import exportGeoJSON
 import exportKML
 import exportZIP
+import RSS
 
 import transitfeed
 
 parsedpath = "/home/site/wwwroot/parsed"
 currentzippath = "/home/site/wwwroot/current.zip"
-previous_mtime = 0
+rsspath = "/home/site/wwwroot/rss.xml"
 
 if not os.path.exists(parsedpath):
     os.makedirs(parsedpath)
 
 while True:
+    rssstat = os.stat(rsspath)
     currentzipstat = os.stat(currentzippath)
-    if previous_mtime != currentzipstat.st_mtime:
-        #print "GTFS:" + str(currentzipstat.st_mtime)
+    if rssstat.st_mtime < currentzipstat.st_mtime:
 
         if zipfile.is_zipfile(currentzippath):
+
+            rss = RSS.RSS(rsspath)
+            rss.add(RSS.RSSItem(currentzippath, "current.zip", "current.zip", "Current static GTFS data"))
 
             print("loading GTFS")
             #load gtfs from zip file
@@ -33,28 +37,35 @@ while True:
             # export gtfs as csv
             currentzip = zipfile.ZipFile(currentzippath,'r')
             currentzip.extractall(parsedpath)
+            rss.addTables(parsedpath, "txt")
 
             sleep(2)
 
             exportJSON.process(schedule, parsedpath)
+            rss.addTables(parsedpath, "json")
 
             sleep(2)
 
             exportXML.process(schedule, parsedpath)
+            rss.addTables(parsedpath, "xml")
 
             sleep(2)
 
             exportGeoJSON.process(schedule, parsedpath)
+            rss.addGIS(parsedpath, "geojson")
 
             sleep(2)
 
             exportKML.process(schedule, parsedpath)
+            rss.addGIS(parsedpath, "kml")
 
             sleep(2)
 
             exportZIP.process(schedule, parsedpath)
+            rss.addGIS(parsedpath, "zip")
 
-        previous_mtime = currentzipstat.st_mtime
+            rss.save()
+
     else:
         sleep(60)
     

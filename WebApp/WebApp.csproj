@@ -107,6 +107,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\jobs\continuous\extractgtfs\RSS.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\exportJSON.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\exportXML.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\exportGeoJSON.py" />
