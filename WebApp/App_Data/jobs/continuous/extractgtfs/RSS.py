@@ -38,6 +38,8 @@ class RSS:
         rss = ET.Element('rss', {'version': '2.0'})
         channel = ET.SubElement(rss, "channel")
         ET.SubElement(channel, 'title').text = 'Big Blue Bus GTFS'
+        ET.SubElement(channel, 'description').text = 'The current static GTFS and parsed files.'
+        ET.SubElement(channel, 'link').text = 'http://gtfs.bigbluebus.com'
         for item in self.items:
             itemroot = ET.SubElement(channel, 'item')
             ET.SubElement(itemroot, 'title').text = item.title
