@@ -2,10 +2,11 @@
 from time import sleep
 import zipfile
 
-import exportJSON
-import exportXML
 import exportGeoJSON
+import exportGPKG
+import exportJSON
 import exportKML
+import exportXML
 import exportZIP
 import RSS
 
@@ -28,6 +29,9 @@ if zipfile.is_zipfile(currentzippath):
     #load gtfs from zip file
     schedule = transitfeed.Schedule()
     schedule.Load(currentzippath)
+
+    exportGPKG.process(schedule, parsedpath)
+    exit()
 
     print("exporting CSV")
     # export gtfs as csv
