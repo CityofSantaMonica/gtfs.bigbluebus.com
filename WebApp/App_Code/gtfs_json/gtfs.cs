@@ -24,7 +24,7 @@ namespace gtfs_json
             stop_times_trips = context.Cache["GTFSJSON.stop_times_trips"] as stop_times_trips;
             trips = context.Cache["GTFSJSON.trips"] as trips;
 
-            if (calendar_dates == null || routes == null || services == null /* || shapes == null*/ || stops == null || stop_times_trips == null || trips == null)
+            if (calendar_dates == null || calendar_dates.Count == 0 || routes == null || routes.Count == 0 || services == null || services.Count == 0 /* || shapes == null*/ || stops == null || stops.Count == 0 || stop_times_trips == null || stop_times_trips.Count == 0 || trips == null || trips.Count == 0)
             {
                 var calendar_dates_path = context.Server.MapPath("/parsed/calendar_dates.json");
                 var routes_path = context.Server.MapPath("/parsed/routes.json");
