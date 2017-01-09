@@ -33,6 +33,13 @@ namespace WebApp
                             Stream requestStream = task.Result;
                             return writeFile(requestStream, id, ".xml");
                         }
+                    case "current":
+                        {
+                            var task = this.Request.Content.ReadAsStreamAsync();
+                            task.Wait();
+                            Stream requestStream = task.Result;
+                            return writeFile(requestStream, id, ".zip");
+                        }
                     default:
                         return BadRequest();
                 }
