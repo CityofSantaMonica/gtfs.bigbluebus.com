@@ -37,6 +37,7 @@ while True:
             # export gtfs as csv
             currentzip = zipfile.ZipFile(currentzippath,'r')
             currentzip.extractall(parsedpath)
+            currentzip.close()
             rss.addTables(parsedpath, "txt")
 
             sleep(2)
