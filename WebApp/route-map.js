@@ -212,7 +212,7 @@ function createRouteMap(hostUrl, routeShortName, showArrows) {
                 visible: false
             }
         });
-        jQuery.ajax(host_url + "/stops", {
+        jQuery.ajax(host_url + "/stops/" + route_short_name, {
             complete: function (jqXHR, textStatus) {
                 if (textStatus == "success") {
                     stops = jqXHR.responseJSON;

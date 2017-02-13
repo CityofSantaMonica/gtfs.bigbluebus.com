@@ -18,6 +18,16 @@
             var results = new { stop_times_html = String.Format("<p style='white-space: nowrap;'>{0}<br />Stop #{1}</p><div style='height: 20ex; width: 100%; overflow-y: scroll;'>{2}</div>", stop.stop_name, stop.stop_code, String.Join("<br/>", direction.trips.Values.Where(trip => trip.service == service).SelectMany(trip => trip.stop_times_sequence.Values.Where(stop_time => stop_time.stop == stop && stop_time.arrival_time.HasValue)).OrderBy(stop_time => stop_time.arrival_time.Value).Select(stop_time => String.Format(stop_time.arrival_time.Value.TimeOfDay < new TimeSpan(12, 0, 0) ? "{0:h:mmtt}{1}" : "<strong>{0:h:mmtt}</strong>{1}", stop_time.arrival_time.Value, StopType(stop_time) )))) };
             serializer.Serialize(stream, results);
         }
+        else if(UrlData.Count == 1)
+        {
+            var route_short_name = UrlData[0];
+            var routes = gtfs.routes.Values.Where(route => route.route_short_name == route_short_name);
+            var route_ids = routes.Select(route => route.route_id).ToArray();
+            var trips = gtfs.trips.Values.Where(trip => route_ids.Contains(trip.route_id));
+            var stop_ids = trips.SelectMany(trip => trip.stops.Select(stop => stop.Value.stop_id)).Distinct().ToArray();
+            var stops = gtfs.stops.Values.Where(stop => stop_ids.Contains(stop.stop_id));
+            serializer.Serialize(stream, stops.ToDictionary(stop=>stop.stop_id));
+        }
         else
         {
             serializer.Serialize(stream, gtfs.stops);
