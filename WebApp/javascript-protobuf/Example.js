@@ -203,7 +203,7 @@ function initialize() {
     // create Google Map
     map = new google.maps.Map(document.getElementById("example-map"), { center: new google.maps.LatLng(34.013776, -118.492043), zoom: 15 });
     // load GeoJSON of routes to be shown when bus is selected
-    map.data.loadGeoJson('//gtfs.bigbluebus.com/parsed/shapes.geojson', null, function () {
+    map.data.loadGeoJson('/parsed/shapes.geojson', null, function () {
         map.data.setStyle(function (feature) {
             var color = feature.getProperty('route_color');
             return {
