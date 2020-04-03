@@ -14,7 +14,7 @@ public class GtfsTable
     public String FileName { get { return Name + Extension; } }
     public String FilePath { get; set; }
     public String Description { get; set; }
-    public String DocumentationUrl { get { return String.Format("https://developers.google.com/transit/gtfs/reference#{0}_fields", Name); } }
+    public String DocumentationUrl { get { return String.Format("https://developers.google.com/transit/gtfs/reference#{0}txt", Name); } }
     public Boolean Exists { get; set; }
     public DateTime LastUpdateUtc { get; set; }
 
