@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -140,6 +141,8 @@
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\util.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\version.py" />
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\__init__.py" />
+    <None Include="App_Data\jobs\triggered\updatetripupdates\settings.job" />
+    <Content Include="App_Data\jobs\triggered\updatetripupdates\run.py" />
     <Content Include="javascript-protobuf\ByteBufferAB.js" />
     <Content Include="javascript-protobuf\Example.js" />
     <Content Include="javascript-protobuf\Long.js" />
@@ -159,9 +162,8 @@
     <Content Include="javascript-protobuf\gtfs-realtime.proto" />
     <Content Include="javascript-protobuf\README.md" />
     <None Include="Properties\PublishProfiles\csmgtfs - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\csmgtfs - ReadOnly - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\csmgtfs - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\testgtfsrupdate - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\testgtfsrupdate - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

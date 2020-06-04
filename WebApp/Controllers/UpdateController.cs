@@ -17,13 +17,19 @@ namespace WebApp
                 switch (id)
                 {
                     case "alerts":
-                    case "tripupdates":
                     case "vehiclepositions":
                         {
                             var task = this.Request.Content.ReadAsStreamAsync();
                             task.Wait();
                             Stream requestStream = task.Result;
                             return writeFile(requestStream, id, ".bin");
+                        }
+                    case "tripupdates":
+                        {
+                            var task = this.Request.Content.ReadAsStreamAsync();
+                            task.Wait();
+                            Stream requestStream = task.Result;
+                            return writeFile(requestStream, id, ".not");
                         }
                     case "nextbus_current":
                     case "nextbus_new":
