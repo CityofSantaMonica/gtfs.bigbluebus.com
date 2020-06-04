@@ -40,6 +40,7 @@ namespace WebApp
                             return writeFile(requestStream, id, ".xml");
                         }
                     case "current":
+                    case "current_swiftly":
                         {
                             var task = this.Request.Content.ReadAsStreamAsync();
                             task.Wait();
