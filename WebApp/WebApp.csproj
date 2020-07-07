@@ -143,6 +143,7 @@
     <Content Include="App_Data\jobs\continuous\extractgtfs\transitfeed\__init__.py" />
     <None Include="App_Data\jobs\triggered\updatetripupdates\settings.job" />
     <Content Include="App_Data\jobs\triggered\updatetripupdates\run.py" />
+    <Content Include="App_Data\jobs\triggered\updatetripupdates\updateprotobuf.py" />
     <Content Include="javascript-protobuf\ByteBufferAB.js" />
     <Content Include="javascript-protobuf\Example.js" />
     <Content Include="javascript-protobuf\Long.js" />
