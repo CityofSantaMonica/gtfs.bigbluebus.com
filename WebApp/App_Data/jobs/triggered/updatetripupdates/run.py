@@ -5,4 +5,4 @@ import updateprotobuf
 time.sleep(10)
 
 updateprotobuf.update('gtfs-rt-trip-updates', 'tripupdates.bin')
-updateprotobuf.update('gtfs-rt-alerts', 'alerts.bin')
+# updateprotobuf.update('gtfs-rt-alerts', 'alerts.bin')
