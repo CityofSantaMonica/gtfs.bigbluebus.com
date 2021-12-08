@@ -17,6 +17,7 @@ namespace WebApp
                 switch (id)
                 {
                     case "alerts":
+                    case "alerts_test":
                     case "vehiclepositions":
                         {
                             var task = this.Request.Content.ReadAsStreamAsync();
