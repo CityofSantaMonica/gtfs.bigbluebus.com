@@ -182,9 +182,9 @@ function getTripsResponse() {
         // start requesting GTFS real time protocol buffers 
         sendPositionRequest();
         window.setInterval(function () {
-            // repeat this every 30 seconds
+            // repeat this every 20 seconds
             sendPositionRequest();
-        }, 30000);
+        }, 20000);
     } catch (e) { }
 }
 function sendTripsRequest() {
