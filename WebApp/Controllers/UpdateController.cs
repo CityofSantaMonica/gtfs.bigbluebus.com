@@ -30,7 +30,7 @@ namespace WebApp
                             var task = this.Request.Content.ReadAsStreamAsync();
                             task.Wait();
                             Stream requestStream = task.Result;
-                            return writeFile(requestStream, id, ".not");
+                            return writeFile(requestStream, "tripupdates_failover", ".bin");
                         }
                     case "nextbus_current":
                     case "nextbus_new":
